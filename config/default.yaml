@@ -1,0 +1,37 @@
+# Default configuration. Overridden by:
+#   - config/sepolia.yaml (when anchoring to Sepolia)
+#   - environment variables (prefix SWIFT_AUDIT_, nested with __)
+#   - .env file (gitignored)
+#
+# Secrets must come from environment variables, never YAML:
+#   SWIFT_AUDIT_ANCHORING_PRIVATE_KEY
+
+environment: dev
+seed: 42
+
+paths:
+  bronze: /Volumes/main/audit/bronze
+  silver: /Volumes/main/audit/silver
+  silver_quarantine: /Volumes/main/audit/silver_quarantine
+  gold: /Volumes/main/audit/gold
+  governance_events: /Volumes/main/audit/governance_events
+
+mlflow:
+  tracking_uri: databricks
+  experiment_name: /Shared/swift_audit/isolation_forest
+  registered_model_name: swift_audit_isolation_forest
+  promotion_thresholds:
+    precision: 0.80
+    recall: 0.70
+    precision_at_k: 0.85
+
+anchoring:
+  rpc_url: https://ethereum-sepolia.publicnode.com
+  chain_id: 11155111
+  wallet_address: ""
+  batch_size: 100
+  gas_limit: 100000
+
+governance:
+  approver: thesis_prototype_approver
+  deployer: thesis_prototype_deployer

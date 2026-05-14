@@ -1,0 +1,106 @@
+# Compliance mapping: source of truth for Chapter 4.
+#
+# Each entry maps an architectural component to one or more regulatory
+# obligations. The `render.py` tool consumes this file to generate the
+# compliance matrix that appears both in the MkDocs site and in the thesis.
+#
+# Regulatory frameworks referenced:
+#   - eu_ai_act: Regulation EU 2024/1689 (the AI Act)
+#   - bcbs_239:  BCBS 239 risk-data aggregation principles
+#   - eba:       EBA guidance on internal governance / model risk management
+#   - gdpr:      Regulation EU 2016/679
+
+components:
+
+  - id: medallion_pipeline
+    name: Bronze/Silver/Gold pipeline with quarantine table
+    obligations:
+      - framework: eu_ai_act
+        article: "Article 10"
+        topic: Data and data governance
+        rationale: >-
+          Structural validation at the Silver layer, a dedicated quarantine
+          table for non-conforming records, and snapshot identifiers in Gold
+          implement the data-quality and traceability requirements of
+          Article 10.
+      - framework: bcbs_239
+        principle: "Principles 3, 4, 6"
+        topic: Accuracy, integrity, completeness, timeliness
+        rationale: >-
+          Quarantine-based handling of non-conforming records and immutable
+          Delta history support all four data-aggregation principles.
+
+  - id: gold_feature_snapshots
+    name: Gold feature store with Delta time-travel snapshot identifiers
+    obligations:
+      - framework: eu_ai_act
+        article: "Article 12"
+        topic: Record-keeping
+        rationale: >-
+          Snapshot identifiers preserve the exact training and inference inputs
+          for any model version, enabling reproducible record-keeping over the
+          lifetime of the system.
+
+  - id: mlflow_lifecycle
+    name: MLflow Model Registry with metric-gated promotion
+    obligations:
+      - framework: eu_ai_act
+        article: "Article 9"
+        topic: Risk management system
+        rationale: >-
+          Metric thresholds enforced at promotion implement the risk
+          management gate that Article 9 requires throughout the model
+          lifecycle.
+      - framework: eu_ai_act
+        article: "Article 17"
+        topic: Quality management system
+        rationale: >-
+          Versioned registry, documented approver identity, and persisted
+          promotion events provide the documentary substrate of the QMS.
+      - framework: eba
+        topic: Model risk management lifecycle
+        rationale: >-
+          Inventory, versioning, independent validation gate, and ongoing
+          monitoring map to the EBA expectations on model risk management.
+
+  - id: governance_event_store
+    name: Typed governance event store (quarantine, promotion, inference, anchor)
+    obligations:
+      - framework: eu_ai_act
+        article: "Article 12"
+        topic: Record-keeping
+        rationale: >-
+          Every audit-relevant happening produces a typed event with stable
+          fields suitable for traceback, satisfying the record-keeping duty.
+
+  - id: blockchain_anchoring
+    name: Merkle batching and on-chain root commitment
+    obligations:
+      - framework: eu_ai_act
+        article: "Article 12"
+        topic: Record-keeping (tamper evidence)
+        rationale: >-
+          Anchoring the Merkle root in an independent trust domain ensures
+          that records cannot be retroactively altered without detection,
+          strengthening the evidential weight of the Article 12 records.
+
+  - id: replay_tool
+    name: Auditor replay tool with four-field structured report
+    obligations:
+      - framework: eu_ai_act
+        article: "Article 13"
+        topic: Transparency and provision of information to deployers
+        rationale: >-
+          Deterministic reconstruction of any past decision, with a
+          structured pass/fail evidence pack, gives deployers and auditors
+          the means to interrogate the system.
+
+  - id: synthetic_data
+    name: Synthetic SWIFT generator with fixed seed
+    obligations:
+      - framework: gdpr
+        article: "Articles 5, 25"
+        topic: Data minimisation and data protection by design
+        rationale: >-
+          Using synthetic data in development avoids unnecessary processing
+          of personal data and demonstrates data protection by design.

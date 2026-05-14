@@ -1,0 +1,10 @@
+# Sepolia-specific overrides. Inherits everything else from default.yaml.
+
+environment: sepolia
+
+anchoring:
+  rpc_url: https://ethereum-sepolia.publicnode.com
+  chain_id: 11155111
+  batch_size: 100
+  gas_limit: 100000
+  # wallet_address: set this when you have a Sepolia wallet

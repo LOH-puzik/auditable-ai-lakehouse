@@ -1,0 +1,84 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# --- Virtual environments ---
+.venv/
+venv/
+ENV/
+env/
+
+# --- uv ---
+.uv/
+
+# --- Testing & coverage ---
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+.cache/
+
+# --- Type checking ---
+.mypy_cache/
+.ruff_cache/
+.dmypy.json
+
+# --- Secrets and config overrides ---
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets.yaml
+secrets.yml
+config/local.yaml
+
+# --- IDE ---
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# --- Databricks ---
+.databricks/
+
+# --- MLflow ---
+mlruns/
+mlartifacts/
+
+# --- Delta Lake local stores ---
+data/
+*.delta/
+
+# --- Docs build ---
+site/
+
+# --- Logs and outputs ---
+logs/
+*.log
+*.out
+
+# --- OS ---
+Thumbs.db
+ehthumbs.db

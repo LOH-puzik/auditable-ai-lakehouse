@@ -1,0 +1,29 @@
+cff-version: 1.2.0
+title: "auditable-ai-lakehouse: An auditable AI architecture for post-trade financial operations"
+message: "If you use this software, please cite it using the metadata in this file."
+type: software
+authors:
+  - given-names: "<First>"
+    family-names: "<Last>"
+    affiliation: "<University>"
+    orcid: "https://orcid.org/0000-0000-0000-0000"
+abstract: >-
+  A reference implementation of an audit-ready AI architecture for post-trade financial
+  operations, combining a medallion lakehouse on Delta Lake, an MLflow model lifecycle with
+  formal staging gates, and blockchain-anchored audit logs. The architecture is mapped to
+  the obligations of the EU AI Act (Regulation EU 2024/1689), BCBS 239, EBA model-risk
+  guidance, and GDPR.
+keywords:
+  - artificial intelligence
+  - audit
+  - EU AI Act
+  - post-trade
+  - lakehouse
+  - Delta Lake
+  - MLflow
+  - blockchain audit log
+  - SWIFT
+license: AGPL-3.0-or-later
+repository-code: "https://github.com/<your-username>/auditable-ai-lakehouse"
+version: 0.1.0
+date-released: "2026-05-14"
