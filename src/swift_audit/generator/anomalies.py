@@ -14,10 +14,10 @@ Anomaly families:
 
 from __future__ import annotations
 
-from enum import Enum
+from enum import StrEnum
 
 
-class AnomalyFamily(str, Enum):
+class AnomalyFamily(StrEnum):
     DUPLICATE_REFERENCE = "duplicate_reference"
     MISMATCHED_ISIN = "mismatched_isin"
     LATE_SETTLEMENT = "late_settlement"

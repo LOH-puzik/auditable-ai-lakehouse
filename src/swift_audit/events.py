@@ -13,8 +13,8 @@ Event types covered:
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
-from enum import Enum
+from datetime import UTC, datetime
+from enum import StrEnum
 from typing import Any, Literal
 from uuid import uuid4
 
@@ -23,7 +23,7 @@ from pydantic import BaseModel, Field
 from swift_audit.hashing import sha256_hex
 
 
-class EventType(str, Enum):
+class EventType(StrEnum):
     QUARANTINE = "quarantine"
     PROMOTION = "promotion"
     INFERENCE = "inference"
@@ -35,7 +35,7 @@ class _BaseEvent(BaseModel):
 
     event_id: str = Field(default_factory=lambda: str(uuid4()))
     event_type: EventType
-    occurred_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    occurred_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
     actor: str  # who triggered this (system process or human approver)
     payload: dict[str, Any]
 

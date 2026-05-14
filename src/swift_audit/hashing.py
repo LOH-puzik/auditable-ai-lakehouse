@@ -17,7 +17,7 @@ from __future__ import annotations
 import hashlib
 import json
 import math
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 
 
@@ -33,7 +33,7 @@ def _canonical(value: Any) -> Any:
     if isinstance(value, datetime):
         if value.tzinfo is None:
             raise ValueError("Naive datetime is not allowed; supply a UTC timezone.")
-        return value.astimezone(timezone.utc).isoformat()
+        return value.astimezone(UTC).isoformat()
     if isinstance(value, bytes):
         return value.hex()
     if isinstance(value, dict):

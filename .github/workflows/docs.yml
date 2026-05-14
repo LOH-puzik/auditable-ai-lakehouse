@@ -28,7 +28,7 @@ jobs:
         run: uv sync --extra docs
 
       - name: Render compliance mapping
-        run: uv run render-compliance render
+        run: uv run render-compliance
 
       - name: Build docs
         run: uv run mkdocs build -f docs/mkdocs.yml -d ../site

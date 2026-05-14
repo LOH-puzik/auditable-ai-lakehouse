@@ -9,4 +9,4 @@ if [ $# -ne 1 ]; then
   exit 1
 fi
 
-exec uv run verify-anchor verify --batch-id "$1"
+exec uv run verify-anchor --batch-id "$1"

@@ -30,5 +30,5 @@ The report passes only if all four checks pass.
 For integrity checks that don't need re-inference:
 
 ```bash
-uv run verify-anchor verify --batch-id BATCH-2026-04-15-0001
+uv run verify-anchor --batch-id BATCH-2026-04-15-0001
 ```

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 import pytest
 
@@ -41,7 +41,7 @@ def test_nan_is_rejected() -> None:
 
 
 def test_utc_datetime_hashes_consistently() -> None:
-    t = datetime(2026, 1, 1, 12, 0, 0, tzinfo=timezone.utc)
+    t = datetime(2026, 1, 1, 12, 0, 0, tzinfo=UTC)
     assert sha256_hex({"t": t}) == sha256_hex({"t": t})
 
 

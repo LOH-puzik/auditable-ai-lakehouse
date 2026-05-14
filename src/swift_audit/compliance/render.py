@@ -19,7 +19,12 @@ def render(
 ) -> None:
     """Render the mapping YAML to a structured markdown document."""
     data = yaml.safe_load(mapping.read_text())
-    lines = ["# Compliance mapping", "", "_Generated from `compliance/mapping.yaml` — do not edit by hand._", ""]
+    lines = [
+        "# Compliance mapping",
+        "",
+        "_Generated from `compliance/mapping.yaml` — do not edit by hand._",
+        "",
+    ]
     for component in data.get("components", []):
         lines.append(f"## {component['name']}")
         lines.append("")

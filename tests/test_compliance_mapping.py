@@ -51,4 +51,10 @@ def test_eu_ai_act_articles_9_10_12_13_17_are_all_covered() -> None:
                 for n in ("9", "10", "12", "13", "17"):
                     if f"Article {n}" in article:
                         covered.add(n)
-    assert covered == {"9", "10", "12", "13", "17"}, f"Missing: {set('9 10 12 13 17'.split()) - covered}"
+    assert covered == {
+        "9",
+        "10",
+        "12",
+        "13",
+        "17",
+    }, f"Missing: {set('9 10 12 13 17'.split()) - covered}"

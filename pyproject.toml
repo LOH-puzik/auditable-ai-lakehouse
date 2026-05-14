@@ -3,7 +3,7 @@ name = "swift-audit"
 version = "0.1.0"
 description = "An auditable AI architecture for post-trade financial operations"
 readme = "README.md"
-requires-python = ">=3.11,<3.12"
+requires-python = ">=3.11,<3.13"
 license = { text = "AGPL-3.0-or-later" }
 authors = [{ name = "Thesis Author" }]
 keywords = [
@@ -22,6 +22,7 @@ classifiers = [
     "Intended Audience :: Science/Research",
     "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     "Topic :: Office/Business :: Financial",
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
 ]
@@ -81,6 +82,10 @@ ignore = ["E501"]  # handled by black
 
 [tool.ruff.lint.per-file-ignores]
 "tests/**" = ["B011"]
+# typer.Option / typer.Argument in defaults is the official Typer pattern.
+"**/cli.py" = ["B008"]
+"**/verify.py" = ["B008"]
+"**/render.py" = ["B008"]
 
 [tool.black]
 line-length = 100
