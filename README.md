@@ -40,6 +40,45 @@ cd auditable-ai-lakehouse
 uv sync
 ```
 
+### Local environment
+
+This project can be installed with `uv` or with a standard Python virtual environment.
+
+#### Option A: using uv
+
+```bash
+uv sync --extra dev --extra docs
+uv run pytest -q
+```
+
+#### Option B: using venv
+
+On Windows PowerShell:
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install -e ".[dev,docs]"
+python -m pytest -q
+```
+
+On macOS/Linux:
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -e ".[dev,docs]"
+python -m pytest -q
+```
+
+When returning to the project, reactivate the environment first:
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+```
+
 ### Run tests
 ```bash
 uv run pytest
