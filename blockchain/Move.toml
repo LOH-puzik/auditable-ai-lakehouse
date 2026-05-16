@@ -4,10 +4,7 @@ version = "1.0.0"
 authors = []
 
 [addresses]
-auditable_ai_lakehouse = "_"
-
-[dev-addresses]
-auditable_ai_lakehouse = "0xc1"
+auditable_ai_lakehouse = "1aab162631fa5026eafee1ee44ae58e188f5aae80d5b8eb4639c0f048f47b8b3"
 
 [dependencies.AptosFramework]
 git = "https://github.com/aptos-labs/aptos-framework.git"
