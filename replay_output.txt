@@ -1,0 +1,55 @@
+﻿                          Replayable inference events                          
++-----------------------------------------------------------------------------+
+|  # | Run            | Alert          | Decision |     Score | Batch         |
+|----+----------------+----------------+----------+-----------+---------------|
+|  0 | RUN-202605161à | ALERT-SCORE-Rà | clear    | -0.169556 | BATCH-RUN-20à |
+|  1 | RUN-202605161à | ALERT-SCORE-Rà | clear    | -0.259559 | BATCH-RUN-20à |
+|  2 | RUN-202605161à | ALERT-SCORE-Rà | clear    | -0.226278 | BATCH-RUN-20à |
+|  3 | RUN-202605161à | ALERT-SCORE-Rà | alert    |  0.089396 | BATCH-RUN-20à |
+|  4 | RUN-202605161à | ALERT-SCORE-Rà | clear    | -0.232501 | BATCH-RUN-20à |
+|  5 | RUN-202605161à | ALERT-SCORE-Rà | clear    | -0.267562 | BATCH-RUN-20à |
+|  6 | RUN-202605161à | ALERT-SCORE-Rà | clear    | -0.279754 | BATCH-RUN-20à |
+|  7 | RUN-202605161à | ALERT-SCORE-Rà | clear    | -0.155432 | BATCH-RUN-20à |
+|  8 | RUN-202605161à | ALERT-SCORE-Rà | clear    | -0.135281 | BATCH-RUN-20à |
+|  9 | RUN-202605161à | ALERT-SCORE-Rà | clear    | -0.181183 | BATCH-RUN-20à |
+| 10 | RUN-202605161à | ALERT-SCORE-Rà | clear    | -0.154797 | BATCH-RUN-20à |
+| 11 | RUN-202605161à | ALERT-SCORE-Rà | clear    | -0.241660 | BATCH-RUN-20à |
+| 12 | RUN-202605161à | ALERT-SCORE-Rà | clear    | -0.193676 | BATCH-RUN-20à |
+| 13 | RUN-202605161à | ALERT-SCORE-Rà | clear    | -0.218355 | BATCH-RUN-20à |
+| 14 | RUN-202605161à | ALERT-SCORE-Rà | clear    | -0.242795 | BATCH-RUN-20à |
+| 15 | RUN-202605161à | ALERT-SCORE-Rà | clear    | -0.165618 | BATCH-RUN-20à |
+| 16 | RUN-202605161à | ALERT-SCORE-Rà | clear    | -0.264712 | BATCH-RUN-20à |
+| 17 | RUN-202605161à | ALERT-SCORE-Rà | clear    | -0.269568 | BATCH-RUN-20à |
+| 18 | RUN-202605161à | ALERT-SCORE-Rà | clear    | -0.266898 | BATCH-RUN-20à |
+| 19 | RUN-202605161à | ALERT-SCORE-Rà | alert    |  0.009812 | BATCH-RUN-20à |
+| 20 | RUN-202605161à | ALERT-SCORE-Rà | clear    | -0.000853 | BATCH-RUN-20à |
+| 21 | RUN-202605161à | ALERT-SCORE-Rà | clear    | -0.226641 | BATCH-RUN-20à |
+| 22 | RUN-202605161à | ALERT-SCORE-Rà | clear    | -0.232798 | BATCH-RUN-20à |
+| 23 | RUN-202605161à | ALERT-SCORE-Rà | clear    | -0.277245 | BATCH-RUN-20à |
+| 24 | RUN-202605161à | ALERT-SCORE-Rà | clear    | -0.222386 | BATCH-RUN-20à |
++-----------------------------------------------------------------------------+
+{
+  "alert_id": "ALERT-SCORE-RUN-20260516190502-00000000",
+  "batch_id": "BATCH-RUN-20260516190502",
+  "deterministic_score_match": true,
+  "input_hash_match": true,
+  "logged_input_hash": 
+"611d10a8637ae889ee21110294cac069fb44fdfde8f0ee4e0e50b858f1f77f9c",
+  "logged_score": -0.16955556513979508,
+  "merkle_proof_valid": true,
+  "merkle_root": 
+"1976b06fffc7ab682f076f880dae901fe90fa8e265971a02350f8bb6a3087721",
+  "onchain_root": 
+"1976b06fffc7ab682f076f880dae901fe90fa8e265971a02350f8bb6a3087721",
+  "onchain_root_match": true,
+  "passed": true,
+  "recomputed_input_hash": 
+"611d10a8637ae889ee21110294cac069fb44fdfde8f0ee4e0e50b858f1f77f9c",
+  "recomputed_score": -0.16955556513979508,
+  "tx_hash": 
+"0x176f7646123cc7241c5e75b14e79741a8ae8821f4f64ea4bc2dc6d5cb4317f8a"
+}
+Aptos Explorer: 
+https://explorer.aptoslabs.com/txn/0x176f7646123cc7241c5e75b14e79741a8ae8821f4f
+64ea4bc2dc6d5cb4317f8a?network=testnet
+

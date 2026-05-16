@@ -1,0 +1,17 @@
+﻿                              audit-lakehouse run                              
++-----------------------------------------------------------------------------+
+| Field             | Value                                                   |
+|-------------------+---------------------------------------------------------|
+| run_id            | RUN-20260516190502                                      |
+| run_dir           | data\runs\RUN-20260516190502                            |
+| records_generated | 25                                                      |
+| records_scored    | 25                                                      |
+| alerts_generated  | 2                                                       |
+| batch_id          | BATCH-RUN-20260516190502                                |
+| merkle_root       | 1976b06fffc7ab682f076f880dae901fe90fa8e265971a02350f8bà |
+| onchain_anchor    | true                                                    |
+| tx_hash           | 0x176f7646123cc7241c5e75b14e79741a8ae8821f4f64ea4bc2dcà |
+| aptos_explorer    | https://explorer.aptoslabs.com/txn/0x176f7646123cc7241à |
+| manifest          | data\runs\RUN-20260516190502\run_manifest.json          |
++-----------------------------------------------------------------------------+
+
