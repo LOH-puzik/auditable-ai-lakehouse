@@ -24,6 +24,6 @@ keywords:
   - blockchain audit log
   - SWIFT
 license: AGPL-3.0-or-later
-repository-code: "https://github.com/<your-username>/auditable-ai-lakehouse"
+repository-code: "https://github.com/LOH-puzik/auditable-ai-lakehouse"
 version: 0.1.0
 date-released: "2026-05-14"

@@ -13,7 +13,7 @@ flowchart LR
     E --> F[InferenceEvent]
     F --> G[Governance event store<br/>Delta]
     G --> H[Merkle batch]
-    H --> I[Sepolia anchor]
+    H --> I[Aptos anchor]
     F --> J[Replay tool]
     G --> J
     I --> J

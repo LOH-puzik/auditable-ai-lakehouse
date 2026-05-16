@@ -1,7 +1,9 @@
 site_name: auditable-ai-lakehouse
 site_description: An auditable AI architecture for post-trade financial operations
-repo_url: https://github.com/your-username/auditable-ai-lakehouse
+repo_url: https://github.com/LOH-puzik/auditable-ai-lakehouse
 repo_name: auditable-ai-lakehouse
+docs_dir: .
+site_dir: ../site
 
 theme:
   name: material

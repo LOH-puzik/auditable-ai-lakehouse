@@ -18,11 +18,11 @@ def render(
     output: Path = typer.Option(Path("docs/compliance-mapping.md"), help="Output markdown path."),
 ) -> None:
     """Render the mapping YAML to a structured markdown document."""
-    data = yaml.safe_load(mapping.read_text())
+    data = yaml.safe_load(mapping.read_text(encoding="utf-8"))
     lines = [
         "# Compliance mapping",
         "",
-        "_Generated from `compliance/mapping.yaml` — do not edit by hand._",
+        "_Generated from `compliance/mapping.yaml` - do not edit by hand._",
         "",
     ]
     for component in data.get("components", []):
@@ -34,12 +34,12 @@ def render(
             framework = obligation["framework"].upper()
             ref = obligation.get("article") or obligation.get("principle") or ""
             topic = obligation.get("topic", "")
-            lines.append(f"### {framework} — {ref}: {topic}")
+            lines.append(f"### {framework} - {ref}: {topic}")
             lines.append("")
             lines.append(obligation.get("rationale", "").strip())
             lines.append("")
     output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text("\n".join(lines))
+    output.write_text("\n".join(lines), encoding="utf-8")
     typer.echo(f"Wrote {output}")
 
 

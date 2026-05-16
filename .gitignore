@@ -41,6 +41,7 @@ coverage.xml
 # --- Type checking ---
 .mypy_cache/
 .ruff_cache/
+.black_cache/
 .dmypy.json
 
 # --- Secrets and config overrides ---
