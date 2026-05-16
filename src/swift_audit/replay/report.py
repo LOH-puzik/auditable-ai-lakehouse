@@ -46,4 +46,27 @@ class ReplayReport:
         )
 
     def to_json(self) -> str:
-        return json.dumps({"passed": self.passed, **asdict(self)}, indent=2)
+        return json.dumps(self.to_dict(), indent=2, sort_keys=True)
+
+    def to_dict(self) -> dict[str, object]:
+        return {"passed": self.passed, **asdict(self)}
+
+
+@dataclass(frozen=True)
+class ReplayBatchReport:
+    batch_id: str
+    reports: list[ReplayReport]
+
+    @property
+    def passed(self) -> bool:
+        return all(report.passed for report in self.reports)
+
+    def to_dict(self) -> dict[str, object]:
+        return {
+            "batch_id": self.batch_id,
+            "passed": self.passed,
+            "reports": [report.to_dict() for report in self.reports],
+        }
+
+    def to_json(self) -> str:
+        return json.dumps(self.to_dict(), indent=2, sort_keys=True)
