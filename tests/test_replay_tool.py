@@ -51,6 +51,22 @@ def test_replay_batch_replays_all_inference_events(tmp_path, monkeypatch) -> Non
     assert all(item.passed for item in report.reports)
 
 
+def test_replay_detects_tampered_anchored_event(tmp_path, monkeypatch) -> None:
+    evidence = _build_replay_evidence(tmp_path)
+    _set_replay_env(monkeypatch, evidence)
+    manifest = json.loads((evidence["anchor_batches_dir"] / "latest" / "manifest.json").read_text())
+    events_path = Path(manifest["events_path"])
+    events = _read_jsonl(events_path)
+    event = next(row for row in events if row["payload"]["alert_id"] == evidence["alert_id"])
+    event["payload"]["decision"] = "tampered"
+    _write_jsonl(events_path, events)
+
+    report = replay_alert(evidence["alert_id"])
+
+    assert report.passed is False
+    assert report.merkle_proof_valid is False
+
+
 def _build_replay_evidence(tmp_path: Path) -> dict:
     gold_records_path = _build_gold_records(tmp_path)
     promotion_manifest_path = _build_promotion_manifest(tmp_path, gold_records_path)
@@ -169,3 +185,10 @@ def _set_replay_env(monkeypatch, evidence: dict) -> None:
 
 def _read_jsonl(path: Path) -> list[dict]:
     return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines()]
+
+
+def _write_jsonl(path: Path, rows: list[dict]) -> None:
+    path.write_text(
+        "\n".join(json.dumps(row, sort_keys=True) for row in rows) + "\n",
+        encoding="utf-8",
+    )

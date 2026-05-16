@@ -8,12 +8,14 @@ batch). Exactly one must be provided.
 from __future__ import annotations
 
 import math
+from datetime import UTC, datetime
 from pathlib import Path
 
 import typer
 from rich.console import Console
 
 from audit_lakehouse.anchoring import MerkleProof, verify_proof
+from audit_lakehouse.hashing import sha256_hex
 from audit_lakehouse.replay.inference import rescore
 from audit_lakehouse.replay.loader import (
     LoadedSnapshot,
@@ -89,6 +91,7 @@ def build_report(
     merkle_root = str(snapshot.anchor_manifest["merkle_root"])
     tx_hash = str(snapshot.anchor_manifest.get("tx_hash", ""))
     onchain_root = read_onchain_root(snapshot.anchor_manifest, config_path=config_path)
+    anchored_event_hash = _recompute_anchored_event_hash(snapshot.anchor_event)
 
     return ReplayReport(
         alert_id=snapshot.alert_id,
@@ -96,7 +99,9 @@ def build_report(
         input_hash_match=snapshot.feature_row_hash == str(payload["input_hash"]),
         deterministic_score_match=_scores_match(rescored.score, float(payload["score"]))
         and rescored.decision == str(payload["decision"]),
-        merkle_proof_valid=verify_proof(proof, merkle_root),
+        merkle_proof_valid=anchored_event_hash == proof.leaf_hash
+        and anchored_event_hash == str(snapshot.anchor_event.get("event_hash", ""))
+        and verify_proof(proof, merkle_root),
         onchain_root_match=bool(onchain_root) and onchain_root == merkle_root,
         logged_input_hash=str(payload["input_hash"]),
         recomputed_input_hash=snapshot.feature_row_hash,
@@ -121,6 +126,28 @@ def _proof_from_row(row: dict) -> MerkleProof:
 
 def _scores_match(left: float, right: float) -> bool:
     return math.isclose(left, right, rel_tol=1e-9, abs_tol=1e-9)
+
+
+def _recompute_anchored_event_hash(event: dict) -> str:
+    return sha256_hex(
+        {
+            "event_id": str(event["event_id"]),
+            "event_type": str(event["event_type"]),
+            "occurred_at": _parse_occurred_at(event["occurred_at"]),
+            "actor": str(event["actor"]),
+            "payload": event["payload"],
+        }
+    )
+
+
+def _parse_occurred_at(value: object) -> datetime:
+    if isinstance(value, datetime):
+        occurred_at = value
+    else:
+        occurred_at = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+    if occurred_at.tzinfo is None:
+        raise ValueError("Anchored event occurred_at must be timezone-aware")
+    return occurred_at.astimezone(UTC)
 
 
 if __name__ == "__main__":
