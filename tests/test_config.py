@@ -9,6 +9,7 @@ from audit_lakehouse.config import load_settings
 
 def test_load_settings_ignores_yaml_private_key(tmp_path: Path, monkeypatch) -> None:
     monkeypatch.delenv("AUDIT_LAKEHOUSE_ANCHORING_PRIVATE_KEY", raising=False)
+    monkeypatch.chdir(tmp_path)
     config_path = tmp_path / "config.yaml"
     config_path.write_text(
         """

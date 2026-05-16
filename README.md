@@ -118,7 +118,7 @@ aptos move publish --profile audit-lakehouse-testnet --package-dir blockchain --
 Create a local `.env` file. The real `.env` is gitignored.
 
 ```powershell
-Copy-Item .env.example .env
+New-Item -Path .env -ItemType File -Force
 ```
 
 Set these values in `.env`:
@@ -128,9 +128,10 @@ AUDIT_LAKEHOUSE_CONFIG=config/aptos-testnet.yaml
 AUDIT_LAKEHOUSE_ANCHOR_ONCHAIN=true
 AUDIT_LAKEHOUSE_ANCHORING__ACCOUNT_ADDRESS=<YOUR_APTOS_ADDRESS>
 AUDIT_LAKEHOUSE_ANCHORING__MODULE_ADDRESS=<YOUR_APTOS_ADDRESS>
+AUDIT_LAKEHOUSE_ANCHORING_PRIVATE_KEY=<YOUR_APTOS_PRIVATE_KEY>
 ```
 
-Do not commit private keys. Leave `AUDIT_LAKEHOUSE_ANCHORING_PRIVATE_KEY` unset and `run.exe` will ask for it securely when it needs to submit the Aptos transaction.
+Do not commit private keys. Keep `.env` local only.
 
 #### 4. Run the full pipeline
 
@@ -148,26 +149,15 @@ This runs synthetic SWIFT data generation, Bronze ingestion, Silver validation/q
 
 Replay verifies the input hash, deterministic model score, Merkle proof, and Aptos on-chain root match. It also prints the Aptos Explorer URL for the anchored transaction.
 
-#### 6. Collect the evidence pack
-
-After the final run, collect the run artifacts and generated verification reports into one folder and zip file:
-
-```powershell
-.\.venv\Scripts\collect-evidence.exe --run-id <RUN_ID>
-```
-
-The output is written under `evidence/<RUN_ID>/` and `evidence/<RUN_ID>.zip`. The evidence folder contains `EVIDENCE_INDEX.md`, `run_manifest.json`, layer manifests, governance events, model metrics, promotion/scoring manifests, anchor artifacts, generated `verify-anchor` and replay reports, and a placeholder folder for manual Aptos Explorer and MLflow screenshots.
-
-To capture exact console output for Chapter 5, tee the commands into text files and pass them to the collector:
+To capture exact console output for Chapter 5, tee the commands into text files:
 
 ```powershell
 .\.venv\Scripts\run.exe 2>&1 | Tee-Object run_output.txt
 .\.venv\Scripts\replay-menu.exe --index 0 2>&1 | Tee-Object replay_output.txt
 .\.venv\Scripts\python.exe -m pytest -q 2>&1 | Tee-Object pytest_output.txt
-.\.venv\Scripts\collect-evidence.exe --run-id <RUN_ID> --run-output run_output.txt --replay-output replay_output.txt --pytest-output pytest_output.txt
 ```
 
-#### 7. Optional local-only smoke test
+#### 6. Optional local-only smoke test
 
 For a demo without Aptos submission:
 
