@@ -141,11 +141,12 @@ The relevant values are:
 
 ```powershell
 $env:AUDIT_LAKEHOUSE_CONFIG="config/aptos-testnet.yaml"
-$env:AUDIT_LAKEHOUSE_ANCHORING_PRIVATE_KEY="0x..."
 $env:AUDIT_LAKEHOUSE_ANCHORING__ACCOUNT_ADDRESS="<YOUR_APTOS_ADDRESS>"
 $env:AUDIT_LAKEHOUSE_ANCHORING__MODULE_ADDRESS="<YOUR_APTOS_ADDRESS>"
 $env:AUDIT_LAKEHOUSE_ANCHOR_ONCHAIN="true"
 ```
+
+Do not commit private keys. You can either set `AUDIT_LAKEHOUSE_ANCHORING_PRIVATE_KEY` in your local `.env`, or leave it unset and `run.exe` will ask for it when it needs to submit the Aptos transaction.
 
 After those variables are set in PowerShell or saved in `.env`, the normal run command anchors on-chain and prints the Aptos Explorer transaction URL:
 

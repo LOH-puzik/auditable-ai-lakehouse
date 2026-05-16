@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
 import typer
@@ -15,10 +16,30 @@ from audit_lakehouse.runtime_env import env_flag, env_value
 
 app = typer.Typer(help="Run the auditable AI pipeline end to end.")
 console = Console()
+PRIVATE_KEY_ENV = "AUDIT_LAKEHOUSE_ANCHORING_PRIVATE_KEY"
 
 
 def _env_flag(name: str, *, default: bool) -> bool:
     return env_flag(name, default=default)
+
+
+def _ensure_private_key_for_onchain(onchain: bool) -> None:
+    if not onchain or _has_private_key():
+        return
+
+    private_key = typer.prompt("Aptos private key", hide_input=True)
+    if not _looks_like_private_key(private_key):
+        raise typer.BadParameter("A valid Aptos private key is required for on-chain anchoring.")
+    os.environ[PRIVATE_KEY_ENV] = private_key.strip()
+
+
+def _has_private_key() -> bool:
+    return _looks_like_private_key(env_value(PRIVATE_KEY_ENV, "") or "")
+
+
+def _looks_like_private_key(value: str) -> bool:
+    key = value.strip()
+    return bool(key) and "..." not in key
 
 
 @app.callback(invoke_without_command=True)
@@ -47,6 +68,7 @@ def main(
     ),
 ) -> None:
     """Execute data generation, medallion processing, modeling, scoring, and anchoring."""
+    _ensure_private_key_for_onchain(onchain)
     result = run_pipeline(
         n=n,
         seed=seed,

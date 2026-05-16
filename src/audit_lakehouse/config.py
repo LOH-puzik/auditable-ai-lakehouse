@@ -91,4 +91,5 @@ def load_settings(config_path: str | Path | None = None) -> Settings:
     if config_path is not None:
         with open(config_path) as f:
             overrides = yaml.safe_load(f) or {}
+        overrides.pop("anchoring_private_key", None)
     return Settings(**overrides)

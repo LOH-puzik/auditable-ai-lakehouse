@@ -3,10 +3,15 @@
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 
 from audit_lakehouse.orchestration.replay_menu import _report_passed, discover_replay_events
-from audit_lakehouse.orchestration.run import _env_flag
+from audit_lakehouse.orchestration.run import (
+    PRIVATE_KEY_ENV,
+    _ensure_private_key_for_onchain,
+    _env_flag,
+)
 from audit_lakehouse.orchestration.runner import run_pipeline
 from audit_lakehouse.replay.report import ReplayReport
 
@@ -86,6 +91,18 @@ def test_run_cli_env_flag_parser_reads_dotenv(tmp_path, monkeypatch) -> None:
     )
 
     assert _env_flag("AUDIT_LAKEHOUSE_ANCHOR_ONCHAIN", default=False)
+
+
+def test_run_cli_prompts_for_private_key_when_onchain(monkeypatch) -> None:
+    monkeypatch.delenv(PRIVATE_KEY_ENV, raising=False)
+    monkeypatch.setattr(
+        "audit_lakehouse.orchestration.run.typer.prompt",
+        lambda *args, **kwargs: "0x" + "1" * 64,
+    )
+
+    _ensure_private_key_for_onchain(True)
+
+    assert os.environ[PRIVATE_KEY_ENV] == "0x" + "1" * 64
 
 
 def _write_test_config(tmp_path: Path) -> Path:
