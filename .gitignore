@@ -79,6 +79,7 @@ site/
 logs/
 *.log
 *.out
+/evidence/
 
 # --- Aptos / Move local state ---
 blockchain/.aptos/

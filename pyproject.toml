@@ -67,6 +67,8 @@ run = "audit_lakehouse.orchestration.run:app"
 replay-menu = "audit_lakehouse.orchestration.replay_menu:app"
 audit-lakehouse-run = "audit_lakehouse.orchestration.run:app"
 audit-lakehouse-replay-menu = "audit_lakehouse.orchestration.replay_menu:app"
+collect-evidence = "audit_lakehouse.evidence.collect:app"
+audit-lakehouse-collect-evidence = "audit_lakehouse.evidence.collect:app"
 
 [build-system]
 requires = ["hatchling"]
@@ -90,6 +92,7 @@ ignore = ["E501"]  # handled by black
 "**/verify.py" = ["B008"]
 "**/render.py" = ["B008"]
 "**/orchestration/*.py" = ["B008"]
+"**/evidence/*.py" = ["B008"]
 
 [tool.black]
 line-length = 100
