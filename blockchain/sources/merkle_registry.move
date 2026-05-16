@@ -2,6 +2,8 @@ module auditable_ai_lakehouse::merkle_registry {
     use aptos_framework::event;
     use aptos_framework::vector;
 
+    const EINVALID_ROOT_LENGTH: u64 = 1;
+
     // ==================== Structs ====================
 
     struct Registry has key {
@@ -26,6 +28,8 @@ module auditable_ai_lakehouse::merkle_registry {
     public entry fun store_merkle_root(
         account: &signer, merkle_root: vector<u8>
     ) {
+        assert!(merkle_root.length() == 32, EINVALID_ROOT_LENGTH);
+
         let addr = account.address_of();
         let registry = &mut Registry[addr];
 

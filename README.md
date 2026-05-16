@@ -109,6 +109,12 @@ To choose without the prompt:
 .\.venv\Scripts\replay-menu.exe --index 0
 ```
 
+Before Aptos anchoring is configured, local replay can still prove the input hash, deterministic score, and Merkle proof. Use this for local smoke tests:
+
+```powershell
+.\.venv\Scripts\replay-menu.exe --index 0 --allow-unanchored
+```
+
 ### Run the replay tool
 ```bash
 uv run replay --alert-id <ALERT_ID>

@@ -80,6 +80,11 @@ logs/
 *.log
 *.out
 
+# --- Aptos / Move local state ---
+blockchain/.aptos/
+blockchain/build/
+**/.aptos/
+
 # --- OS ---
 Thumbs.db
 ehthumbs.db

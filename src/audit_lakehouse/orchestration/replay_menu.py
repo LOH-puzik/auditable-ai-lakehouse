@@ -14,6 +14,7 @@ from rich.console import Console
 from rich.table import Table
 
 from audit_lakehouse.replay.cli import replay_alert
+from audit_lakehouse.replay.report import ReplayReport
 
 app = typer.Typer(help="Choose an existing inference event and replay it.")
 console = Console()
@@ -47,6 +48,11 @@ def main(
     output: Path | None = typer.Option(
         None, "--output", help="Write selected replay JSON to a file."
     ),
+    allow_unanchored: bool = typer.Option(
+        False,
+        "--allow-unanchored",
+        help="Exit successfully when local checks pass but the batch is not on-chain anchored.",
+    ),
 ) -> None:
     """List inference events, choose one by index, and run replay."""
     events = discover_replay_events(data_root=data_root, limit=limit)
@@ -64,7 +70,7 @@ def main(
     if output is not None:
         output.write_text(payload + "\n", encoding="utf-8")
     console.print(payload)
-    if not report.passed:
+    if not _report_passed(report, allow_unanchored=allow_unanchored):
         raise typer.Exit(code=1)
 
 
@@ -163,6 +169,19 @@ def _event_by_index(events: list[ReplayMenuEvent], index: int) -> ReplayMenuEven
         if event.index == index:
             return event
     raise typer.BadParameter(f"Index {index} is not in the listed events")
+
+
+def _report_passed(report: ReplayReport, *, allow_unanchored: bool) -> bool:
+    if report.passed:
+        return True
+    return (
+        allow_unanchored
+        and report.input_hash_match
+        and report.deterministic_score_match
+        and report.merkle_proof_valid
+        and not report.onchain_root_match
+        and not report.onchain_root
+    )
 
 
 @contextmanager
