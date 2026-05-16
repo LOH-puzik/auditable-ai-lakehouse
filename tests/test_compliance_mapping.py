@@ -11,7 +11,7 @@ from pathlib import Path
 import yaml
 
 ALLOWED_FRAMEWORKS = {"eu_ai_act", "bcbs_239", "eba", "gdpr"}
-MAPPING_PATH = Path(__file__).parent.parent / "src/swift_audit/compliance/mapping.yaml"
+MAPPING_PATH = Path(__file__).parent.parent / "src/audit_lakehouse/compliance/mapping.yaml"
 
 
 def test_mapping_loads() -> None:

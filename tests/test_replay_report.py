@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 
-from swift_audit.replay.report import ReplayReport
+from audit_lakehouse.replay.report import ReplayReport
 
 
 def _make_report(**overrides: object) -> ReplayReport:

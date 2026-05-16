@@ -8,8 +8,8 @@ from pathlib import Path
 
 import pytest
 
-from swift_audit.generator import AnomalyFamily, generate_synthetic_swift_dataset
-from swift_audit.lakehouse import (
+from audit_lakehouse.generator import AnomalyFamily, generate_synthetic_swift_dataset
+from audit_lakehouse.lakehouse import (
     build_gold_features,
     ingest_bronze_raw_messages,
     parse_validate_silver,

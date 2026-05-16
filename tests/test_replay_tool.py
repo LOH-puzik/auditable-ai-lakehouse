@@ -12,16 +12,16 @@ from sklearn.ensemble import IsolationForest
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 
-from swift_audit.anchoring import build_anchor_batch
-from swift_audit.generator import generate_synthetic_swift_dataset
-from swift_audit.lakehouse import (
+from audit_lakehouse.anchoring import build_anchor_batch
+from audit_lakehouse.generator import generate_synthetic_swift_dataset
+from audit_lakehouse.lakehouse import (
     build_gold_features,
     ingest_bronze_raw_messages,
     parse_validate_silver,
 )
-from swift_audit.lakehouse.gold import MODEL_FEATURE_COLUMNS
-from swift_audit.modeling import score_gold_features
-from swift_audit.replay.cli import replay_alert, replay_batch
+from audit_lakehouse.lakehouse.gold import MODEL_FEATURE_COLUMNS
+from audit_lakehouse.modeling import score_gold_features
+from audit_lakehouse.replay.cli import replay_alert, replay_batch
 
 
 def test_replay_alert_passes_for_complete_local_evidence(tmp_path, monkeypatch) -> None:
@@ -136,7 +136,7 @@ def _build_promotion_manifest(tmp_path: Path, gold_records_path: Path) -> Path:
         "approved": True,
         "promotion_id": "PROMOTE-REPLAY",
         "promotion_manifest_hash": "a" * 64,
-        "model_name": "swift_audit_isolation_forest",
+        "model_name": "audit_lakehouse_isolation_forest",
         "model_version": "TRAIN-REPLAY",
         "promoted_model_path": str(model_path),
     }
@@ -159,10 +159,12 @@ def _mark_batch_as_anchored(manifest_path: Path, *, tx_hash: str) -> None:
 
 
 def _set_replay_env(monkeypatch, evidence: dict) -> None:
-    monkeypatch.setenv("SWIFT_AUDIT_GOLD_RECORDS", str(evidence["gold_records_path"]))
-    monkeypatch.setenv("SWIFT_AUDIT_PROMOTION_MANIFEST", str(evidence["promotion_manifest_path"]))
-    monkeypatch.setenv("SWIFT_AUDIT_INFERENCE_EVENTS", str(evidence["inference_events_path"]))
-    monkeypatch.setenv("SWIFT_AUDIT_ANCHOR_BATCHES_DIR", str(evidence["anchor_batches_dir"]))
+    monkeypatch.setenv("AUDIT_LAKEHOUSE_GOLD_RECORDS", str(evidence["gold_records_path"]))
+    monkeypatch.setenv(
+        "AUDIT_LAKEHOUSE_PROMOTION_MANIFEST", str(evidence["promotion_manifest_path"])
+    )
+    monkeypatch.setenv("AUDIT_LAKEHOUSE_INFERENCE_EVENTS", str(evidence["inference_events_path"]))
+    monkeypatch.setenv("AUDIT_LAKEHOUSE_ANCHOR_BATCHES_DIR", str(evidence["anchor_batches_dir"]))
 
 
 def _read_jsonl(path: Path) -> list[dict]:

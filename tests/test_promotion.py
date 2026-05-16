@@ -8,7 +8,7 @@ from pathlib import Path
 
 import pytest
 
-from swift_audit.modeling import promote_model
+from audit_lakehouse.modeling import promote_model
 
 
 def test_promote_model_approves_and_emits_event(tmp_path) -> None:
@@ -21,7 +21,7 @@ def test_promote_model_approves_and_emits_event(tmp_path) -> None:
         training_manifest,
         tmp_path / "registry" / "production",
         tmp_path / "events" / "promotion_events.jsonl",
-        model_name="swift_audit_isolation_forest",
+        model_name="audit_lakehouse_isolation_forest",
         thresholds={"precision": 0.8, "recall": 0.7, "precision_at_k": 0.85},
         approver="approver@example.edu",
         promoted_at=datetime(2026, 1, 5, 12, 0, tzinfo=UTC),
@@ -45,7 +45,7 @@ def test_promote_model_approves_and_emits_event(tmp_path) -> None:
     assert len(events) == 1
     assert events[0]["event_type"] == "promotion"
     assert events[0]["actor"] == "approver@example.edu"
-    assert events[0]["payload"]["model_name"] == "swift_audit_isolation_forest"
+    assert events[0]["payload"]["model_name"] == "audit_lakehouse_isolation_forest"
     assert events[0]["payload"]["to_stage"] == "Production"
     assert len(events[0]["event_hash"]) == 64
 
@@ -60,7 +60,7 @@ def test_promote_model_rejects_when_threshold_fails(tmp_path) -> None:
         training_manifest,
         tmp_path / "registry" / "production",
         tmp_path / "events" / "promotion_events.jsonl",
-        model_name="swift_audit_isolation_forest",
+        model_name="audit_lakehouse_isolation_forest",
         thresholds={"precision": 0.8, "recall": 0.7, "precision_at_k": 0.85},
         approver="approver@example.edu",
         promoted_at=datetime(2026, 1, 5, tzinfo=UTC),

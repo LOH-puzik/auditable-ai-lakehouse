@@ -13,8 +13,8 @@ from __future__ import annotations
 import os
 from pathlib import Path
 
-from swift_audit.config import load_settings
-from swift_audit.modeling import train_isolation_forest
+from audit_lakehouse.config import load_settings
+from audit_lakehouse.modeling import train_isolation_forest
 
 
 def _repo_root() -> Path:
@@ -30,19 +30,19 @@ def _local_tracking_uri(root: Path) -> str:
 
 
 ROOT = _repo_root()
-CONFIG_PATH = Path(os.getenv("SWIFT_AUDIT_CONFIG", str(ROOT / "config/default.yaml")))
+CONFIG_PATH = Path(os.getenv("AUDIT_LAKEHOUSE_CONFIG", str(ROOT / "config/default.yaml")))
 GOLD_RECORDS_PATH = Path(
-    os.getenv("SWIFT_AUDIT_GOLD_RECORDS", str(ROOT / "data/gold/features/records.jsonl"))
+    os.getenv("AUDIT_LAKEHOUSE_GOLD_RECORDS", str(ROOT / "data/gold/features/records.jsonl"))
 )
 MODEL_OUTPUT_DIR = Path(
-    os.getenv("SWIFT_AUDIT_MODEL_OUTPUT", str(ROOT / "data/models/isolation_forest"))
+    os.getenv("AUDIT_LAKEHOUSE_MODEL_OUTPUT", str(ROOT / "data/models/isolation_forest"))
 )
-CONTAMINATION = float(os.getenv("SWIFT_AUDIT_IFOREST_CONTAMINATION", "0.05"))
-N_ESTIMATORS = int(os.getenv("SWIFT_AUDIT_IFOREST_N_ESTIMATORS", "200"))
+CONTAMINATION = float(os.getenv("AUDIT_LAKEHOUSE_IFOREST_CONTAMINATION", "0.05"))
+N_ESTIMATORS = int(os.getenv("AUDIT_LAKEHOUSE_IFOREST_N_ESTIMATORS", "200"))
 
 settings = load_settings(CONFIG_PATH)
-tracking_uri = os.getenv("SWIFT_AUDIT_MLFLOW_TRACKING_URI", _local_tracking_uri(ROOT))
-experiment_name = os.getenv("SWIFT_AUDIT_MLFLOW_EXPERIMENT", "swift_audit/isolation_forest")
+tracking_uri = os.getenv("AUDIT_LAKEHOUSE_MLFLOW_TRACKING_URI", _local_tracking_uri(ROOT))
+experiment_name = os.getenv("AUDIT_LAKEHOUSE_MLFLOW_EXPERIMENT", "audit_lakehouse/isolation_forest")
 
 result = train_isolation_forest(
     GOLD_RECORDS_PATH,

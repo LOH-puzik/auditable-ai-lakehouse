@@ -8,14 +8,14 @@ from pathlib import Path
 
 import pytest
 
-from swift_audit.anchoring import (
+from audit_lakehouse.anchoring import (
     MerkleProof,
     build_anchor_batch,
     finalize_anchor_batch,
     verify_proof,
 )
-from swift_audit.anchoring.ledger import AnchorReceipt
-from swift_audit.events import InferenceEvent, PromotionEvent
+from audit_lakehouse.anchoring.ledger import AnchorReceipt
+from audit_lakehouse.events import InferenceEvent, PromotionEvent
 
 
 def test_build_anchor_batch_writes_events_proofs_and_manifest(tmp_path) -> None:

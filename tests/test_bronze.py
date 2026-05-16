@@ -7,9 +7,9 @@ from datetime import UTC, datetime
 
 import pytest
 
-from swift_audit.generator import generate_synthetic_swift_dataset
-from swift_audit.hashing import sha256_hex
-from swift_audit.lakehouse import ingest_bronze_raw_messages
+from audit_lakehouse.generator import generate_synthetic_swift_dataset
+from audit_lakehouse.hashing import sha256_hex
+from audit_lakehouse.lakehouse import ingest_bronze_raw_messages
 
 
 def test_ingest_bronze_raw_messages_writes_records_and_manifest(tmp_path) -> None:

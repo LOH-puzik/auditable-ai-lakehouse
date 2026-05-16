@@ -5,8 +5,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from swift_audit.orchestration.replay_menu import discover_replay_events
-from swift_audit.orchestration.runner import run_pipeline
+from audit_lakehouse.orchestration.replay_menu import discover_replay_events
+from audit_lakehouse.orchestration.runner import run_pipeline
 
 
 def test_run_pipeline_writes_manifest_and_replay_menu_discovers_events(tmp_path) -> None:
@@ -49,7 +49,7 @@ def _write_test_config(tmp_path: Path) -> Path:
         """
 environment: test
 mlflow:
-  registered_model_name: swift_audit_isolation_forest
+  registered_model_name: audit_lakehouse_isolation_forest
   promotion_thresholds:
     precision: 0.0
     recall: 0.0

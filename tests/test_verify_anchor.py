@@ -6,14 +6,14 @@ import json
 from datetime import UTC, datetime
 from pathlib import Path
 
-from swift_audit.anchoring import build_anchor_batch
-from swift_audit.anchoring.verify import verify_batch
-from swift_audit.events import InferenceEvent, PromotionEvent
+from audit_lakehouse.anchoring import build_anchor_batch
+from audit_lakehouse.anchoring.verify import verify_batch
+from audit_lakehouse.events import InferenceEvent, PromotionEvent
 
 
 def test_verify_batch_passes_for_complete_local_anchor_evidence(tmp_path, monkeypatch) -> None:
     evidence = _build_anchor_evidence(tmp_path)
-    monkeypatch.setenv("SWIFT_AUDIT_ANCHOR_BATCHES_DIR", str(evidence["anchor_batches_dir"]))
+    monkeypatch.setenv("AUDIT_LAKEHOUSE_ANCHOR_BATCHES_DIR", str(evidence["anchor_batches_dir"]))
 
     report = verify_batch("BATCH-VERIFY")
 
@@ -27,7 +27,7 @@ def test_verify_batch_passes_for_complete_local_anchor_evidence(tmp_path, monkey
 
 def test_verify_batch_fails_for_tampered_proof(tmp_path, monkeypatch) -> None:
     evidence = _build_anchor_evidence(tmp_path)
-    monkeypatch.setenv("SWIFT_AUDIT_ANCHOR_BATCHES_DIR", str(evidence["anchor_batches_dir"]))
+    monkeypatch.setenv("AUDIT_LAKEHOUSE_ANCHOR_BATCHES_DIR", str(evidence["anchor_batches_dir"]))
     proofs_path = Path(evidence["proofs_path"])
     proofs = _read_jsonl(proofs_path)
     proofs[0]["siblings"][0]["sibling_hash"] = "f" * 64

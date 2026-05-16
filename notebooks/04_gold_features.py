@@ -13,8 +13,8 @@ from __future__ import annotations
 import os
 from pathlib import Path
 
-from swift_audit.config import load_settings
-from swift_audit.lakehouse import build_gold_features
+from audit_lakehouse.config import load_settings
+from audit_lakehouse.lakehouse import build_gold_features
 
 
 def _repo_root() -> Path:
@@ -26,20 +26,20 @@ def _repo_root() -> Path:
 
 
 ROOT = _repo_root()
-CONFIG_PATH = Path(os.getenv("SWIFT_AUDIT_CONFIG", str(ROOT / "config/default.yaml")))
+CONFIG_PATH = Path(os.getenv("AUDIT_LAKEHOUSE_CONFIG", str(ROOT / "config/default.yaml")))
 SILVER_INSTRUCTIONS_PATH = Path(
     os.getenv(
-        "SWIFT_AUDIT_SILVER_INSTRUCTIONS",
+        "AUDIT_LAKEHOUSE_SILVER_INSTRUCTIONS",
         str(ROOT / "data/silver/swift_messages/instructions.jsonl"),
     )
 )
 SILVER_STATUSES_PATH = Path(
     os.getenv(
-        "SWIFT_AUDIT_SILVER_STATUSES",
+        "AUDIT_LAKEHOUSE_SILVER_STATUSES",
         str(ROOT / "data/silver/swift_messages/statuses.jsonl"),
     )
 )
-GOLD_OUTPUT_DIR = Path(os.getenv("SWIFT_AUDIT_GOLD_OUTPUT", str(ROOT / "data/gold/features")))
+GOLD_OUTPUT_DIR = Path(os.getenv("AUDIT_LAKEHOUSE_GOLD_OUTPUT", str(ROOT / "data/gold/features")))
 
 settings = load_settings(CONFIG_PATH)
 result = build_gold_features(

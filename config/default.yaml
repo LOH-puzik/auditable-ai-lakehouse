@@ -1,10 +1,10 @@
 # Default configuration. Overridden by:
 #   - config/aptos-devnet.yaml (when anchoring to Aptos devnet)
-#   - environment variables (prefix SWIFT_AUDIT_, nested with __)
+#   - environment variables (prefix AUDIT_LAKEHOUSE_, nested with __)
 #   - .env file (gitignored)
 #
 # Secrets must come from environment variables, never YAML:
-#   SWIFT_AUDIT_ANCHORING_PRIVATE_KEY
+#   AUDIT_LAKEHOUSE_ANCHORING_PRIVATE_KEY
 
 environment: dev
 seed: 42
@@ -18,8 +18,8 @@ paths:
 
 mlflow:
   tracking_uri: databricks
-  experiment_name: /Shared/swift_audit/isolation_forest
-  registered_model_name: swift_audit_isolation_forest
+  experiment_name: /Shared/audit_lakehouse/isolation_forest
+  registered_model_name: audit_lakehouse_isolation_forest
   promotion_thresholds:
     precision: 0.80
     recall: 0.70
@@ -30,8 +30,9 @@ anchoring:
   faucet_url: https://faucet.devnet.aptoslabs.com
   account_address: ""
   module_address: ""
-  module_name: audit_anchor
-  function_name: anchor_root
+  module_name: merkle_registry
+  function_name: store_merkle_root
+  event_name: MerkleRootStored
   batch_size: 100
   max_gas_amount: 10000
   gas_unit_price: 100

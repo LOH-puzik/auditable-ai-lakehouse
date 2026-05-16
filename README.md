@@ -16,13 +16,14 @@ An **auditor replay tool** closes the loop: given an alert or batch identifier, 
 
 ```
 auditable-ai-lakehouse/
-├── notebooks/         Databricks notebooks (Bronze → Silver → Gold → train → score → anchor)
-├── src/swift_audit/   Installable Python package (generator, anchoring, replay, compliance)
-├── tests/             Unit tests (pytest)
-├── config/            YAML configuration (local demo, default gates, Aptos devnet)
-├── docs/              MkDocs site (architecture, compliance mapping, replay tool)
-├── scripts/           Convenience shell scripts
-└── .github/workflows/ CI (pytest + ruff) and docs deployment
+├── blockchain/          Aptos Move package for Merkle root anchoring
+├── notebooks/           Databricks notebooks (Bronze → Silver → Gold → train → score → anchor)
+├── src/audit_lakehouse/ Installable Python package (generator, anchoring, replay, compliance)
+├── tests/               Unit tests (pytest)
+├── config/              YAML configuration (local demo, default gates, Aptos devnet)
+├── docs/                MkDocs site (architecture, compliance mapping, replay tool)
+├── scripts/             Convenience shell scripts
+└── .github/workflows/   CI (pytest + ruff) and docs deployment
 ```
 
 ## Quickstart
@@ -86,7 +87,7 @@ uv run pytest
 
 ### Run the full demo pipeline
 
-The simplest end-to-end demo is the orchestrator executable. It creates a new run under `data/runs/<RUN_ID>/`, then writes a `run_manifest.json` that the replay menu can discover later. The short commands are `run` and `replay-menu`; the same entry points are also available as `swift-audit-run` and `swift-audit-replay-menu`.
+The simplest end-to-end demo is the orchestrator executable. It creates a new run under `data/runs/<RUN_ID>/`, then writes a `run_manifest.json` that the replay menu can discover later. The short commands are `run` and `replay-menu`; the same entry points are also available as `audit-lakehouse-run` and `audit-lakehouse-replay-menu`.
 
 ```powershell
 .\.venv\Scripts\run.exe --n 100 --seed 42 --anomaly-rate 0.08
@@ -121,22 +122,22 @@ The local Merkle batch runs without a blockchain account. To publish roots to Ap
 
 ```powershell
 aptos init --network devnet
-aptos move publish --package-dir move/audit_anchor --named-addresses audit_anchor=<YOUR_APTOS_ADDRESS>
+aptos move publish --package-dir blockchain --named-addresses auditable_ai_lakehouse=<YOUR_APTOS_ADDRESS>
 
-$env:SWIFT_AUDIT_CONFIG="config/aptos-devnet.yaml"
-$env:SWIFT_AUDIT_ANCHORING_PRIVATE_KEY="0x..."
-$env:SWIFT_AUDIT_ANCHORING__MODULE_ADDRESS="<YOUR_APTOS_ADDRESS>"
-$env:SWIFT_AUDIT_ANCHOR_ONCHAIN="true"
+$env:AUDIT_LAKEHOUSE_CONFIG="config/aptos-devnet.yaml"
+$env:AUDIT_LAKEHOUSE_ANCHORING_PRIVATE_KEY="0x..."
+$env:AUDIT_LAKEHOUSE_ANCHORING__MODULE_ADDRESS="<YOUR_APTOS_ADDRESS>"
+$env:AUDIT_LAKEHOUSE_ANCHOR_ONCHAIN="true"
 .\.venv\Scripts\python.exe notebooks\07_anchor_batch.py
 ```
 
 The orchestrator can also submit the Merkle root once the Aptos account and Move module are ready:
 
 ```powershell
-$env:SWIFT_AUDIT_CONFIG="config/aptos-devnet.yaml"
-$env:SWIFT_AUDIT_ANCHORING_PRIVATE_KEY="0x..."
-$env:SWIFT_AUDIT_ANCHORING__ACCOUNT_ADDRESS="<YOUR_APTOS_ADDRESS>"
-$env:SWIFT_AUDIT_ANCHORING__MODULE_ADDRESS="<YOUR_APTOS_ADDRESS>"
+$env:AUDIT_LAKEHOUSE_CONFIG="config/aptos-devnet.yaml"
+$env:AUDIT_LAKEHOUSE_ANCHORING_PRIVATE_KEY="0x..."
+$env:AUDIT_LAKEHOUSE_ANCHORING__ACCOUNT_ADDRESS="<YOUR_APTOS_ADDRESS>"
+$env:AUDIT_LAKEHOUSE_ANCHORING__MODULE_ADDRESS="<YOUR_APTOS_ADDRESS>"
 
 .\.venv\Scripts\run.exe --onchain
 ```

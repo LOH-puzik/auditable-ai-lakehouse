@@ -9,13 +9,13 @@ from pathlib import Path
 import joblib
 import pytest
 
-from swift_audit.generator import generate_synthetic_swift_dataset
-from swift_audit.lakehouse import (
+from audit_lakehouse.generator import generate_synthetic_swift_dataset
+from audit_lakehouse.lakehouse import (
     build_gold_features,
     ingest_bronze_raw_messages,
     parse_validate_silver,
 )
-from swift_audit.modeling import train_isolation_forest
+from audit_lakehouse.modeling import train_isolation_forest
 
 
 def test_train_isolation_forest_writes_artifacts_and_metrics(tmp_path) -> None:

@@ -6,7 +6,7 @@ from datetime import UTC, datetime
 
 import pytest
 
-from swift_audit.hashing import canonical_json, sha256_hex, sha256_pair
+from audit_lakehouse.hashing import canonical_json, sha256_hex, sha256_pair
 
 
 def test_hash_is_deterministic_across_dict_orderings() -> None:

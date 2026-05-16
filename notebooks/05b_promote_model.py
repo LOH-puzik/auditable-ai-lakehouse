@@ -13,8 +13,8 @@ from __future__ import annotations
 import os
 from pathlib import Path
 
-from swift_audit.config import load_settings
-from swift_audit.modeling import promote_model
+from audit_lakehouse.config import load_settings
+from audit_lakehouse.modeling import promote_model
 
 
 def _repo_root() -> Path:
@@ -26,22 +26,22 @@ def _repo_root() -> Path:
 
 
 ROOT = _repo_root()
-CONFIG_PATH = Path(os.getenv("SWIFT_AUDIT_CONFIG", str(ROOT / "config/default.yaml")))
+CONFIG_PATH = Path(os.getenv("AUDIT_LAKEHOUSE_CONFIG", str(ROOT / "config/default.yaml")))
 TRAINING_MANIFEST_PATH = Path(
     os.getenv(
-        "SWIFT_AUDIT_TRAINING_MANIFEST",
+        "AUDIT_LAKEHOUSE_TRAINING_MANIFEST",
         str(ROOT / "data/models/isolation_forest/manifest.json"),
     )
 )
 PROMOTION_OUTPUT_DIR = Path(
     os.getenv(
-        "SWIFT_AUDIT_PROMOTION_OUTPUT",
+        "AUDIT_LAKEHOUSE_PROMOTION_OUTPUT",
         str(ROOT / "data/model_registry/production/isolation_forest"),
     )
 )
 PROMOTION_EVENTS_PATH = Path(
     os.getenv(
-        "SWIFT_AUDIT_PROMOTION_EVENTS",
+        "AUDIT_LAKEHOUSE_PROMOTION_EVENTS",
         str(ROOT / "data/governance_events/promotion_events.jsonl"),
     )
 )

@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import pytest
 
-from swift_audit.anchoring.merkle import MerkleProof, build_tree, verify_proof
-from swift_audit.hashing import sha256_hex, sha256_pair
+from audit_lakehouse.anchoring.merkle import MerkleProof, build_tree, verify_proof
+from audit_lakehouse.hashing import sha256_hex, sha256_pair
 
 
 def test_verify_proof_succeeds_on_constructed_tree() -> None:

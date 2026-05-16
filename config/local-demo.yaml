@@ -6,7 +6,7 @@
 environment: local-demo
 
 mlflow:
-  registered_model_name: swift_audit_isolation_forest
+  registered_model_name: audit_lakehouse_isolation_forest
   promotion_thresholds:
     precision: 0.0
     recall: 0.0

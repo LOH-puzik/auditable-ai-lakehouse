@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from swift_audit.anchoring import AptosLedgerClient
+from audit_lakehouse.anchoring import AptosLedgerClient
 
 
 def test_aptos_ledger_commits_root_and_reads_root_with_fake_client(monkeypatch) -> None:
@@ -12,7 +12,7 @@ def test_aptos_ledger_commits_root_and_reads_root_with_fake_client(monkeypatch) 
     fake_client = _FakeAptosClient(root=root, event_address="0x" + "3" * 64)
     fake_account = _FakeAptosAccount("0x" + "2" * 64)
     monkeypatch.setattr(
-        "swift_audit.anchoring.anchor._build_anchor_payload",
+        "audit_lakehouse.anchoring.anchor._build_anchor_payload",
         _fake_build_payload,
     )
     client = AptosLedgerClient(
@@ -30,8 +30,8 @@ def test_aptos_ledger_commits_root_and_reads_root_with_fake_client(monkeypatch) 
     assert receipt.merkle_root == root
     assert fake_client.last_payload == {
         "module": "0x" + "3" * 64,
-        "module_name": "audit_anchor",
-        "function_name": "anchor_root",
+        "module_name": "merkle_registry",
+        "function_name": "store_merkle_root",
         "root": root,
     }
     assert client.read_root(receipt.tx_hash) == root
@@ -45,7 +45,7 @@ def test_aptos_ledger_accepts_vector_root_from_event(monkeypatch) -> None:
     )
     fake_account = _FakeAptosAccount("0x" + "2" * 64)
     monkeypatch.setattr(
-        "swift_audit.anchoring.anchor._build_anchor_payload",
+        "audit_lakehouse.anchoring.anchor._build_anchor_payload",
         _fake_build_payload,
     )
     client = AptosLedgerClient(
@@ -62,7 +62,7 @@ def test_aptos_ledger_rejects_invalid_merkle_root(monkeypatch) -> None:
     fake_client = _FakeAptosClient(root="a" * 64)
     fake_account = _FakeAptosAccount("0x" + "2" * 64)
     monkeypatch.setattr(
-        "swift_audit.anchoring.anchor._build_anchor_payload",
+        "audit_lakehouse.anchoring.anchor._build_anchor_payload",
         _fake_build_payload,
     )
     client = AptosLedgerClient(
@@ -170,7 +170,7 @@ class _FakeAptosClient:
                     "data": {"merkle_root": "f" * 64},
                 },
                 {
-                    "type": f"{self.event_address}::audit_anchor::RootAnchored",
+                    "type": f"{self.event_address}::merkle_registry::MerkleRootStored",
                     "data": {"merkle_root": self.root},
                 },
             ],

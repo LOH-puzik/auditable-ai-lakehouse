@@ -13,8 +13,8 @@ from __future__ import annotations
 import os
 from pathlib import Path
 
-from swift_audit.config import load_settings
-from swift_audit.lakehouse import parse_validate_silver
+from audit_lakehouse.config import load_settings
+from audit_lakehouse.lakehouse import parse_validate_silver
 
 
 def _repo_root() -> Path:
@@ -26,22 +26,24 @@ def _repo_root() -> Path:
 
 
 ROOT = _repo_root()
-CONFIG_PATH = Path(os.getenv("SWIFT_AUDIT_CONFIG", str(ROOT / "config/default.yaml")))
+CONFIG_PATH = Path(os.getenv("AUDIT_LAKEHOUSE_CONFIG", str(ROOT / "config/default.yaml")))
 BRONZE_RECORDS_PATH = Path(
-    os.getenv("SWIFT_AUDIT_BRONZE_RECORDS", str(ROOT / "data/bronze/swift_messages/records.jsonl"))
+    os.getenv(
+        "AUDIT_LAKEHOUSE_BRONZE_RECORDS", str(ROOT / "data/bronze/swift_messages/records.jsonl")
+    )
 )
 SILVER_OUTPUT_DIR = Path(
-    os.getenv("SWIFT_AUDIT_SILVER_OUTPUT", str(ROOT / "data/silver/swift_messages"))
+    os.getenv("AUDIT_LAKEHOUSE_SILVER_OUTPUT", str(ROOT / "data/silver/swift_messages"))
 )
 QUARANTINE_OUTPUT_DIR = Path(
     os.getenv(
-        "SWIFT_AUDIT_SILVER_QUARANTINE_OUTPUT",
+        "AUDIT_LAKEHOUSE_SILVER_QUARANTINE_OUTPUT",
         str(ROOT / "data/silver_quarantine/swift_messages"),
     )
 )
 GOVERNANCE_EVENTS_PATH = Path(
     os.getenv(
-        "SWIFT_AUDIT_QUARANTINE_EVENTS",
+        "AUDIT_LAKEHOUSE_QUARANTINE_EVENTS",
         str(ROOT / "data/governance_events/quarantine_events.jsonl"),
     )
 )

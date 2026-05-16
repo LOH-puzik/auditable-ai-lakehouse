@@ -13,8 +13,8 @@ from __future__ import annotations
 import os
 from pathlib import Path
 
-from swift_audit.config import load_settings
-from swift_audit.generator import generate_synthetic_swift_dataset
+from audit_lakehouse.config import load_settings
+from audit_lakehouse.generator import generate_synthetic_swift_dataset
 
 
 def _repo_root() -> Path:
@@ -26,10 +26,12 @@ def _repo_root() -> Path:
 
 
 ROOT = _repo_root()
-CONFIG_PATH = Path(os.getenv("SWIFT_AUDIT_CONFIG", str(ROOT / "config/default.yaml")))
-OUTPUT_DIR = Path(os.getenv("SWIFT_AUDIT_SYNTHETIC_OUTPUT", str(ROOT / "data/raw/synthetic_swift")))
-RECORD_COUNT = int(os.getenv("SWIFT_AUDIT_SYNTHETIC_N", "1000"))
-ANOMALY_RATE = float(os.getenv("SWIFT_AUDIT_ANOMALY_RATE", "0.02"))
+CONFIG_PATH = Path(os.getenv("AUDIT_LAKEHOUSE_CONFIG", str(ROOT / "config/default.yaml")))
+OUTPUT_DIR = Path(
+    os.getenv("AUDIT_LAKEHOUSE_SYNTHETIC_OUTPUT", str(ROOT / "data/raw/synthetic_swift"))
+)
+RECORD_COUNT = int(os.getenv("AUDIT_LAKEHOUSE_SYNTHETIC_N", "1000"))
+ANOMALY_RATE = float(os.getenv("AUDIT_LAKEHOUSE_ANOMALY_RATE", "0.02"))
 
 settings = load_settings(CONFIG_PATH)
 

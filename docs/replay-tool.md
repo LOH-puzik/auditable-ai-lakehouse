@@ -15,7 +15,7 @@ uv run replay --batch-id BATCH-20260516100000
 uv run replay --alert-id ALERT-SCORE-20260516100000-00000000 --output replay-report.json
 ```
 
-The local prototype reads the same artifacts produced by notebooks 04-07. These paths can be overridden with environment variables: `SWIFT_AUDIT_GOLD_RECORDS`, `SWIFT_AUDIT_PROMOTION_MANIFEST`, `SWIFT_AUDIT_INFERENCE_EVENTS`, `SWIFT_AUDIT_ANCHOR_BATCHES_DIR`, and `SWIFT_AUDIT_ANCHOR_BATCH_MANIFEST`.
+The local prototype reads the same artifacts produced by notebooks 04-07. These paths can be overridden with environment variables: `AUDIT_LAKEHOUSE_GOLD_RECORDS`, `AUDIT_LAKEHOUSE_PROMOTION_MANIFEST`, `AUDIT_LAKEHOUSE_INFERENCE_EVENTS`, `AUDIT_LAKEHOUSE_ANCHOR_BATCHES_DIR`, and `AUDIT_LAKEHOUSE_ANCHOR_BATCH_MANIFEST`.
 
 ## Output
 

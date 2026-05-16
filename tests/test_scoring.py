@@ -13,14 +13,14 @@ from sklearn.ensemble import IsolationForest
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 
-from swift_audit.generator import generate_synthetic_swift_dataset
-from swift_audit.lakehouse import (
+from audit_lakehouse.generator import generate_synthetic_swift_dataset
+from audit_lakehouse.lakehouse import (
     build_gold_features,
     ingest_bronze_raw_messages,
     parse_validate_silver,
 )
-from swift_audit.lakehouse.gold import MODEL_FEATURE_COLUMNS
-from swift_audit.modeling import score_gold_features
+from audit_lakehouse.lakehouse.gold import MODEL_FEATURE_COLUMNS
+from audit_lakehouse.modeling import score_gold_features
 
 
 def test_score_gold_features_writes_scored_rows_and_events(tmp_path) -> None:
@@ -56,7 +56,7 @@ def test_score_gold_features_writes_scored_rows_and_events(tmp_path) -> None:
     assert events[0]["actor"] == "test_scoring_job"
     assert events[0]["payload"]["alert_id"] == scored[0]["alert_id"]
     assert events[0]["payload"]["input_hash"] == scored[0]["input_hash"]
-    assert events[0]["payload"]["model_name"] == "swift_audit_isolation_forest"
+    assert events[0]["payload"]["model_name"] == "audit_lakehouse_isolation_forest"
     assert len(events[0]["event_hash"]) == 64
 
 
@@ -204,7 +204,7 @@ def _build_promotion_manifest(
         "approved": approved,
         "promotion_id": "PROMOTE-TEST",
         "promotion_manifest_hash": "a" * 64,
-        "model_name": "swift_audit_isolation_forest",
+        "model_name": "audit_lakehouse_isolation_forest",
         "model_version": "TRAIN-TEST",
         "promoted_model_path": str(model_path),
     }

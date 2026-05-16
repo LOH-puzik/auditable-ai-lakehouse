@@ -8,8 +8,8 @@ from pathlib import Path
 
 import pytest
 
-from swift_audit.generator import generate_synthetic_swift_dataset
-from swift_audit.lakehouse import ingest_bronze_raw_messages, parse_validate_silver
+from audit_lakehouse.generator import generate_synthetic_swift_dataset
+from audit_lakehouse.lakehouse import ingest_bronze_raw_messages, parse_validate_silver
 
 
 def test_parse_validate_silver_writes_instruction_and_status_tables(tmp_path) -> None:

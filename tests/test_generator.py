@@ -8,7 +8,7 @@ from datetime import UTC, date, datetime
 
 import pytest
 
-from swift_audit.generator import (
+from audit_lakehouse.generator import (
     AnomalyFamily,
     SettlementStatus,
     generate_mt540,

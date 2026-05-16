@@ -13,8 +13,8 @@ from __future__ import annotations
 import os
 from pathlib import Path
 
-from swift_audit.config import load_settings
-from swift_audit.modeling import score_gold_features
+from audit_lakehouse.config import load_settings
+from audit_lakehouse.modeling import score_gold_features
 
 
 def _repo_root() -> Path:
@@ -26,22 +26,22 @@ def _repo_root() -> Path:
 
 
 ROOT = _repo_root()
-CONFIG_PATH = Path(os.getenv("SWIFT_AUDIT_CONFIG", str(ROOT / "config/default.yaml")))
+CONFIG_PATH = Path(os.getenv("AUDIT_LAKEHOUSE_CONFIG", str(ROOT / "config/default.yaml")))
 GOLD_RECORDS_PATH = Path(
-    os.getenv("SWIFT_AUDIT_GOLD_RECORDS", str(ROOT / "data/gold/features/records.jsonl"))
+    os.getenv("AUDIT_LAKEHOUSE_GOLD_RECORDS", str(ROOT / "data/gold/features/records.jsonl"))
 )
 PROMOTION_MANIFEST_PATH = Path(
     os.getenv(
-        "SWIFT_AUDIT_PROMOTION_MANIFEST",
+        "AUDIT_LAKEHOUSE_PROMOTION_MANIFEST",
         str(ROOT / "data/model_registry/production/isolation_forest/manifest.json"),
     )
 )
 SCORING_OUTPUT_DIR = Path(
-    os.getenv("SWIFT_AUDIT_SCORING_OUTPUT", str(ROOT / "data/scoring/inference"))
+    os.getenv("AUDIT_LAKEHOUSE_SCORING_OUTPUT", str(ROOT / "data/scoring/inference"))
 )
 INFERENCE_EVENTS_PATH = Path(
     os.getenv(
-        "SWIFT_AUDIT_INFERENCE_EVENTS",
+        "AUDIT_LAKEHOUSE_INFERENCE_EVENTS",
         str(ROOT / "data/governance_events/inference_events.jsonl"),
     )
 )

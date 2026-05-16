@@ -13,8 +13,8 @@ from __future__ import annotations
 import os
 from pathlib import Path
 
-from swift_audit.config import load_settings
-from swift_audit.lakehouse import ingest_bronze_raw_messages
+from audit_lakehouse.config import load_settings
+from audit_lakehouse.lakehouse import ingest_bronze_raw_messages
 
 
 def _repo_root() -> Path:
@@ -26,15 +26,15 @@ def _repo_root() -> Path:
 
 
 ROOT = _repo_root()
-CONFIG_PATH = Path(os.getenv("SWIFT_AUDIT_CONFIG", str(ROOT / "config/default.yaml")))
+CONFIG_PATH = Path(os.getenv("AUDIT_LAKEHOUSE_CONFIG", str(ROOT / "config/default.yaml")))
 SYNTHETIC_DIR = Path(
-    os.getenv("SWIFT_AUDIT_SYNTHETIC_OUTPUT", str(ROOT / "data/raw/synthetic_swift"))
+    os.getenv("AUDIT_LAKEHOUSE_SYNTHETIC_OUTPUT", str(ROOT / "data/raw/synthetic_swift"))
 )
 RAW_MESSAGES_PATH = Path(
-    os.getenv("SWIFT_AUDIT_RAW_MESSAGES", str(SYNTHETIC_DIR / "raw_messages.jsonl"))
+    os.getenv("AUDIT_LAKEHOUSE_RAW_MESSAGES", str(SYNTHETIC_DIR / "raw_messages.jsonl"))
 )
 BRONZE_OUTPUT_DIR = Path(
-    os.getenv("SWIFT_AUDIT_BRONZE_OUTPUT", str(ROOT / "data/bronze/swift_messages"))
+    os.getenv("AUDIT_LAKEHOUSE_BRONZE_OUTPUT", str(ROOT / "data/bronze/swift_messages"))
 )
 
 settings = load_settings(CONFIG_PATH)

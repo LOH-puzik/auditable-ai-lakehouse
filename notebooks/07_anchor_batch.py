@@ -13,8 +13,8 @@ from __future__ import annotations
 import os
 from pathlib import Path
 
-from swift_audit.anchoring import AptosLedgerClient, build_anchor_batch, finalize_anchor_batch
-from swift_audit.config import load_settings
+from audit_lakehouse.anchoring import AptosLedgerClient, build_anchor_batch, finalize_anchor_batch
+from audit_lakehouse.config import load_settings
 
 
 def _repo_root() -> Path:
@@ -26,20 +26,20 @@ def _repo_root() -> Path:
 
 
 ROOT = _repo_root()
-CONFIG_PATH = Path(os.getenv("SWIFT_AUDIT_CONFIG", str(ROOT / "config/default.yaml")))
+CONFIG_PATH = Path(os.getenv("AUDIT_LAKEHOUSE_CONFIG", str(ROOT / "config/default.yaml")))
 GOVERNANCE_EVENTS_DIR = Path(
-    os.getenv("SWIFT_AUDIT_GOVERNANCE_EVENTS_DIR", str(ROOT / "data/governance_events"))
+    os.getenv("AUDIT_LAKEHOUSE_GOVERNANCE_EVENTS_DIR", str(ROOT / "data/governance_events"))
 )
 ANCHOR_BATCH_OUTPUT_DIR = Path(
-    os.getenv("SWIFT_AUDIT_ANCHOR_BATCH_OUTPUT", str(ROOT / "data/anchor_batches/latest"))
+    os.getenv("AUDIT_LAKEHOUSE_ANCHOR_BATCH_OUTPUT", str(ROOT / "data/anchor_batches/latest"))
 )
 ANCHOR_EVENTS_PATH = Path(
     os.getenv(
-        "SWIFT_AUDIT_ANCHOR_EVENTS",
+        "AUDIT_LAKEHOUSE_ANCHOR_EVENTS",
         str(ROOT / "data/governance_events/anchor_events.jsonl"),
     )
 )
-ANCHOR_ONCHAIN = os.getenv("SWIFT_AUDIT_ANCHOR_ONCHAIN", "false").lower() in {
+ANCHOR_ONCHAIN = os.getenv("AUDIT_LAKEHOUSE_ANCHOR_ONCHAIN", "false").lower() in {
     "1",
     "true",
     "yes",
@@ -75,6 +75,7 @@ if ANCHOR_ONCHAIN:
         module_address=settings.anchoring.module_address,
         module_name=settings.anchoring.module_name,
         function_name=settings.anchoring.function_name,
+        event_name=settings.anchoring.event_name,
         max_gas_amount=settings.anchoring.max_gas_amount,
         gas_unit_price=settings.anchoring.gas_unit_price,
     )
