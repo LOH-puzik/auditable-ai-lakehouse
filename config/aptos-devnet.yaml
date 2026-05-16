@@ -1,0 +1,14 @@
+# Aptos devnet overrides. Inherits everything else from default.yaml.
+
+environment: aptos-devnet
+
+anchoring:
+  node_url: https://fullnode.devnet.aptoslabs.com/v1
+  faucet_url: https://faucet.devnet.aptoslabs.com
+  batch_size: 100
+  max_gas_amount: 10000
+  gas_unit_price: 100
+  module_name: audit_anchor
+  function_name: anchor_root
+  # account_address: optional; normally derived from SWIFT_AUDIT_ANCHORING_PRIVATE_KEY
+  # module_address: optional; defaults to account_address when the Move package is published there

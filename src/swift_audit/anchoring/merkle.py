@@ -11,6 +11,7 @@ order, the tree and all proofs are byte-identical.
 from __future__ import annotations
 
 from dataclasses import dataclass
+from string import hexdigits
 
 from swift_audit.hashing import sha256_pair
 
@@ -39,7 +40,56 @@ class MerkleTree:
 
 def build_tree(leaf_hashes: list[str]) -> MerkleTree:
     """Build a Merkle tree from a list of leaf hex digests."""
-    raise NotImplementedError("Implement in step 5 of the build plan")
+    if not leaf_hashes:
+        raise ValueError("Cannot build a Merkle tree with no leaves")
+    for leaf_hash in leaf_hashes:
+        _validate_hex_digest(leaf_hash)
+
+    proof_steps: list[list[tuple[str, bool]]] = [[] for _ in leaf_hashes]
+    level = list(leaf_hashes)
+    level_indices = [[index] for index in range(len(leaf_hashes))]
+
+    while len(level) > 1:
+        next_level: list[str] = []
+        next_indices: list[list[int]] = []
+
+        for left_position in range(0, len(level), 2):
+            right_position = left_position + 1
+            has_right = right_position < len(level)
+
+            left_hash = level[left_position]
+            right_hash = level[right_position] if has_right else left_hash
+            left_indices = level_indices[left_position]
+            right_indices = level_indices[right_position] if has_right else []
+
+            for original_index in left_indices:
+                proof_steps[original_index].append((right_hash, True))
+            for original_index in right_indices:
+                proof_steps[original_index].append((left_hash, False))
+
+            next_level.append(sha256_pair(left_hash, right_hash))
+            next_indices.append(left_indices + right_indices)
+
+        level = next_level
+        level_indices = next_indices
+
+    return MerkleTree(
+        root=level[0],
+        leaves=list(leaf_hashes),
+        proofs=[
+            MerkleProof(
+                leaf_index=index,
+                leaf_hash=leaf_hash,
+                siblings=proof_steps[index],
+            )
+            for index, leaf_hash in enumerate(leaf_hashes)
+        ],
+    )
+
+
+def _validate_hex_digest(value: str) -> None:
+    if len(value) != 64 or any(character not in hexdigits for character in value):
+        raise ValueError(f"Expected a 64-character hex digest, got {value!r}")
 
 
 def verify_proof(proof: MerkleProof, expected_root: str) -> bool:

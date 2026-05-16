@@ -1,9 +1,9 @@
 """Ledger abstraction.
 
-The thesis frames Sepolia as a proxy for a permissioned enterprise ledger such
-as Hyperledger Fabric. To make that argument defensible, the rest of the system
-talks to a `LedgerClient` protocol rather than to web3.py directly; swapping in
-a Fabric client is then a localized change.
+The thesis treats the public Aptos devnet/testnet as a practical proxy for an
+external append-only audit domain. The rest of the system talks to a
+`LedgerClient` protocol rather than to an Aptos SDK client directly, so a
+permissioned ledger adapter can still be swapped in later.
 """
 
 from __future__ import annotations

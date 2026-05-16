@@ -1,5 +1,5 @@
 # Default configuration. Overridden by:
-#   - config/sepolia.yaml (when anchoring to Sepolia)
+#   - config/aptos-devnet.yaml (when anchoring to Aptos devnet)
 #   - environment variables (prefix SWIFT_AUDIT_, nested with __)
 #   - .env file (gitignored)
 #
@@ -26,11 +26,15 @@ mlflow:
     precision_at_k: 0.85
 
 anchoring:
-  rpc_url: https://ethereum-sepolia.publicnode.com
-  chain_id: 11155111
-  wallet_address: ""
+  node_url: https://fullnode.devnet.aptoslabs.com/v1
+  faucet_url: https://faucet.devnet.aptoslabs.com
+  account_address: ""
+  module_address: ""
+  module_name: audit_anchor
+  function_name: anchor_root
   batch_size: 100
-  gas_limit: 100000
+  max_gas_amount: 10000
+  gas_unit_price: 100
 
 governance:
   approver: thesis_prototype_approver

@@ -40,13 +40,17 @@ class MLflowConfig(BaseModel):
 
 
 class AnchoringConfig(BaseModel):
-    """Sepolia anchoring settings. Private key comes from env var only."""
+    """Aptos anchoring settings. Private key comes from env var only."""
 
-    rpc_url: str = "https://ethereum-sepolia.publicnode.com"
-    chain_id: int = 11155111  # Sepolia
-    wallet_address: str = ""
+    node_url: str = "https://fullnode.devnet.aptoslabs.com/v1"
+    faucet_url: str = "https://faucet.devnet.aptoslabs.com"
+    account_address: str = ""
+    module_address: str = ""
+    module_name: str = "audit_anchor"
+    function_name: str = "anchor_root"
     batch_size: int = 100  # events per Merkle batch
-    gas_limit: int = 100_000
+    max_gas_amount: int = 10_000
+    gas_unit_price: int = 100
 
 
 class GovernanceConfig(BaseModel):
