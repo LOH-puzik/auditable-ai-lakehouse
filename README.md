@@ -89,23 +89,20 @@ uv run pytest
 
 Use this sequence for the thesis demo on Windows PowerShell.
 
-#### 1. Activate the project environment
+#### First-time setup
+
+Clone the repository and create the local Python environment:
 
 ```powershell
-cd C:\Users\Dhia\Projects\MSc-thesis\auditable-ai-lakehouse
-.\.venv\Scripts\Activate.ps1
-```
-
-If `.venv` does not exist yet, create it first:
-
-```powershell
+git clone https://github.com/LOH-puzik/auditable-ai-lakehouse.git
+cd auditable-ai-lakehouse
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
 python -m pip install -e ".[dev,docs]"
 ```
 
-#### 2. Publish the Aptos Move module once
+Publish the Aptos Move module once:
 
 ```powershell
 aptos init --profile audit-lakehouse-testnet --network testnet
@@ -113,9 +110,7 @@ aptos move compile --package-dir blockchain --named-addresses auditable_ai_lakeh
 aptos move publish --profile audit-lakehouse-testnet --package-dir blockchain --named-addresses auditable_ai_lakehouse=<YOUR_APTOS_ADDRESS>
 ```
 
-#### 3. Configure the live demo
-
-Create a local `.env` file. The real `.env` is gitignored.
+Create a local `.env` file. The real `.env` is gitignored:
 
 ```powershell
 New-Item -Path .env -ItemType File -Force
@@ -133,31 +128,67 @@ AUDIT_LAKEHOUSE_ANCHORING_PRIVATE_KEY=<YOUR_APTOS_PRIVATE_KEY>
 
 Do not commit private keys. Keep `.env` local only.
 
-#### 4. Run the full pipeline
+#### Fresh demo run
+
+Every fresh demo run uses three commands.
+
+1. Activate the environment:
 
 ```powershell
-.\.venv\Scripts\run.exe
+cd C:\Users\Dhia\Projects\MSc-thesis\auditable-ai-lakehouse
+.\.venv\Scripts\Activate.ps1
 ```
 
-This runs synthetic SWIFT data generation, Bronze ingestion, Silver validation/quarantine, Gold feature building, model training, model promotion, scoring, governance event generation, Merkle batch creation, and Aptos testnet anchoring. The command prints the Aptos Explorer transaction URL after anchoring.
-
-#### 5. Replay one event
-
-```powershell
-.\.venv\Scripts\replay-menu.exe --index 0
-```
-
-Replay verifies the input hash, deterministic model score, Merkle proof, and Aptos on-chain root match. It also prints the Aptos Explorer URL for the anchored transaction.
-
-To capture exact console output for Chapter 5, tee the commands into text files:
+2. Run the pipeline and anchor the Merkle root on Aptos testnet:
 
 ```powershell
 .\.venv\Scripts\run.exe 2>&1 | Tee-Object run_output.txt
+```
+
+3. Replay the newest event and verify the audit chain:
+
+```powershell
 .\.venv\Scripts\replay-menu.exe --index 0 2>&1 | Tee-Object replay_output.txt
+```
+
+Optional reliability check:
+
+```powershell
 .\.venv\Scripts\python.exe -m pytest -q 2>&1 | Tee-Object pytest_output.txt
 ```
 
-#### 6. Optional local-only smoke test
+#### Output fields
+
+`run.exe` prints one table for the new pipeline execution:
+
+| Field | Meaning |
+| --- | --- |
+| `run_id` | Unique identifier for this full execution. |
+| `run_dir` | Local folder containing the generated manifests and artifacts. |
+| `records_generated` | Number of synthetic input records created. |
+| `records_scored` | Number of records scored by the model. |
+| `alerts_generated` | Number of records classified as alerts. |
+| `batch_id` | Identifier of the Merkle batch created from the governance events. |
+| `merkle_root` | Cryptographic root summarizing the event batch. |
+| `onchain_anchor` | Whether the Merkle root was written to Aptos. |
+| `tx_hash` | Aptos transaction ID. Paste this into Aptos Explorer on testnet. |
+| `aptos_explorer` | Direct Aptos Explorer URL for the transaction. |
+| `manifest` | Main JSON summary for the run. |
+
+`replay-menu.exe --index 0` first lists replayable events, then prints one JSON report:
+
+| Field | Meaning |
+| --- | --- |
+| `alert_id` | Event selected for replay. |
+| `batch_id` | Merkle batch containing the event. |
+| `input_hash_match` | Recomputed model input hash matches the logged input hash. |
+| `deterministic_score_match` | Recomputed model score matches the logged score. |
+| `merkle_proof_valid` | The event is included in the Merkle batch. |
+| `onchain_root_match` | Local Merkle root matches the root stored on Aptos. |
+| `passed` | Overall audit result. This should be `true` for a valid replay. |
+| `tx_hash` | Aptos transaction ID used for the on-chain root check. |
+
+#### Optional local-only smoke test
 
 For a demo without Aptos submission:
 
