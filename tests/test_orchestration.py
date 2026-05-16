@@ -77,6 +77,17 @@ def test_run_cli_env_flag_parser(monkeypatch) -> None:
     assert not _env_flag("AUDIT_LAKEHOUSE_ANCHOR_ONCHAIN", default=True)
 
 
+def test_run_cli_env_flag_parser_reads_dotenv(tmp_path, monkeypatch) -> None:
+    monkeypatch.delenv("AUDIT_LAKEHOUSE_ANCHOR_ONCHAIN", raising=False)
+    monkeypatch.chdir(tmp_path)
+    (tmp_path / ".env").write_text(
+        "AUDIT_LAKEHOUSE_ANCHOR_ONCHAIN=true\n",
+        encoding="utf-8",
+    )
+
+    assert _env_flag("AUDIT_LAKEHOUSE_ANCHOR_ONCHAIN", default=False)
+
+
 def _write_test_config(tmp_path: Path) -> Path:
     config_path = tmp_path / "config.yaml"
     config_path.write_text(

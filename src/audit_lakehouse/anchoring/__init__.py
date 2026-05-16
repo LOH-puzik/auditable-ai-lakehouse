@@ -7,10 +7,13 @@ from audit_lakehouse.anchoring.batch import (
     build_anchor_batch,
     finalize_anchor_batch,
 )
+from audit_lakehouse.anchoring.explorer import aptos_explorer_network, aptos_explorer_tx_url
 from audit_lakehouse.anchoring.merkle import MerkleProof, MerkleTree, build_tree, verify_proof
 
 __all__ = [
     "AnchorBatchResult",
+    "aptos_explorer_network",
+    "aptos_explorer_tx_url",
     "MerkleProof",
     "MerkleTree",
     "OnChainAnchorResult",

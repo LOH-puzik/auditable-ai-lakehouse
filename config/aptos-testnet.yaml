@@ -2,6 +2,13 @@
 
 environment: aptos-testnet
 
+mlflow:
+  registered_model_name: audit_lakehouse_isolation_forest
+  promotion_thresholds:
+    precision: 0.0
+    recall: 0.0
+    precision_at_k: 0.0
+
 anchoring:
   node_url: https://fullnode.testnet.aptoslabs.com/v1
   faucet_url: https://faucet.testnet.aptoslabs.com

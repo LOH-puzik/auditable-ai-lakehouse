@@ -13,8 +13,11 @@ import typer
 from rich.console import Console
 from rich.table import Table
 
+from audit_lakehouse.anchoring import aptos_explorer_tx_url
+from audit_lakehouse.config import load_settings
 from audit_lakehouse.replay.cli import replay_alert
 from audit_lakehouse.replay.report import ReplayReport
+from audit_lakehouse.runtime_env import env_value
 
 app = typer.Typer(help="Choose an existing inference event and replay it.")
 console = Console()
@@ -41,7 +44,7 @@ def main(
         Path("data/runs"), "--data-root", help="Root containing run manifests."
     ),
     config: Path = typer.Option(
-        Path(os.getenv("AUDIT_LAKEHOUSE_CONFIG", "config/default.yaml")),
+        Path(env_value("AUDIT_LAKEHOUSE_CONFIG", "config/default.yaml") or "config/default.yaml"),
         "--config",
         help="YAML config path.",
     ),
@@ -74,6 +77,16 @@ def main(
     if output is not None:
         output.write_text(payload + "\n", encoding="utf-8")
     console.print(payload)
+    if report.tx_hash:
+        settings = load_settings(config)
+        console.print(
+            "Aptos Explorer: "
+            + aptos_explorer_tx_url(
+                report.tx_hash,
+                environment=settings.environment,
+                node_url=settings.anchoring.node_url,
+            )
+        )
     if not _report_passed(report, allow_unanchored=allow_unanchored):
         raise typer.Exit(code=1)
 

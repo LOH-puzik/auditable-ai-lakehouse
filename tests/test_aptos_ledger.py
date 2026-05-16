@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from audit_lakehouse.anchoring import AptosLedgerClient
+from audit_lakehouse.anchoring import AptosLedgerClient, aptos_explorer_tx_url
 
 
 def test_aptos_ledger_commits_root_and_reads_root_with_fake_client(monkeypatch) -> None:
@@ -35,6 +35,19 @@ def test_aptos_ledger_commits_root_and_reads_root_with_fake_client(monkeypatch) 
         "root": root,
     }
     assert client.read_root(receipt.tx_hash) == root
+
+
+def test_aptos_explorer_url_uses_testnet_network() -> None:
+    tx_hash = "0x" + "4" * 64
+
+    assert (
+        aptos_explorer_tx_url(
+            tx_hash,
+            environment="aptos-testnet",
+            node_url="https://fullnode.testnet.aptoslabs.com/v1",
+        )
+        == f"https://explorer.aptoslabs.com/txn/{tx_hash}?network=testnet"
+    )
 
 
 def test_aptos_ledger_accepts_vector_root_from_event(monkeypatch) -> None:

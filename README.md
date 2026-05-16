@@ -129,7 +129,17 @@ For the full thesis demo, publish the Move package once, set the Aptos environme
 ```powershell
 aptos init --profile audit-lakehouse-testnet --network testnet
 aptos move publish --profile audit-lakehouse-testnet --package-dir blockchain --named-addresses auditable_ai_lakehouse=<YOUR_APTOS_ADDRESS>
+```
 
+For a repeatable local demo, create `.env` from `.env.example` and fill in the testnet values. The real `.env` is gitignored.
+
+```powershell
+Copy-Item .env.example .env
+```
+
+The relevant values are:
+
+```powershell
 $env:AUDIT_LAKEHOUSE_CONFIG="config/aptos-testnet.yaml"
 $env:AUDIT_LAKEHOUSE_ANCHORING_PRIVATE_KEY="0x..."
 $env:AUDIT_LAKEHOUSE_ANCHORING__ACCOUNT_ADDRESS="<YOUR_APTOS_ADDRESS>"
@@ -137,13 +147,13 @@ $env:AUDIT_LAKEHOUSE_ANCHORING__MODULE_ADDRESS="<YOUR_APTOS_ADDRESS>"
 $env:AUDIT_LAKEHOUSE_ANCHOR_ONCHAIN="true"
 ```
 
-After those variables are set, the normal run command anchors on-chain:
+After those variables are set in PowerShell or saved in `.env`, the normal run command anchors on-chain and prints the Aptos Explorer transaction URL:
 
 ```powershell
-.\.venv\Scripts\run.exe --n 100 --seed 42 --anomaly-rate 0.08
+.\.venv\Scripts\run.exe
 ```
 
-Then replay without `--allow-unanchored`:
+Then replay without `--allow-unanchored`; the replay command also prints the same Explorer transaction URL:
 
 ```powershell
 .\.venv\Scripts\replay-menu.exe --index 0

@@ -2,24 +2,23 @@
 
 from __future__ import annotations
 
-import os
 from pathlib import Path
 
 import typer
 from rich.console import Console
 from rich.table import Table
 
+from audit_lakehouse.anchoring import aptos_explorer_tx_url
+from audit_lakehouse.config import load_settings
 from audit_lakehouse.orchestration.runner import run_pipeline
+from audit_lakehouse.runtime_env import env_flag, env_value
 
 app = typer.Typer(help="Run the auditable AI pipeline end to end.")
 console = Console()
 
 
 def _env_flag(name: str, *, default: bool) -> bool:
-    value = os.getenv(name)
-    if value is None:
-        return default
-    return value.strip().lower() in {"1", "true", "yes", "on"}
+    return env_flag(name, default=default)
 
 
 @app.callback(invoke_without_command=True)
@@ -34,7 +33,10 @@ def main(
     run_id: str | None = typer.Option(None, "--run-id", help="Optional explicit run identifier."),
     data_root: Path = typer.Option(Path("data/runs"), "--data-root", help="Root for run outputs."),
     config: Path = typer.Option(
-        Path(os.getenv("AUDIT_LAKEHOUSE_CONFIG", "config/local-demo.yaml")),
+        Path(
+            env_value("AUDIT_LAKEHOUSE_CONFIG", "config/local-demo.yaml")
+            or "config/local-demo.yaml"
+        ),
         "--config",
         help="YAML config path.",
     ),
@@ -69,6 +71,16 @@ def main(
     table.add_row("merkle_root", result.merkle_root)
     table.add_row("onchain_anchor", str(result.onchain_anchor).lower())
     table.add_row("tx_hash", result.tx_hash or "<not anchored>")
+    if result.tx_hash:
+        settings = load_settings(config)
+        table.add_row(
+            "aptos_explorer",
+            aptos_explorer_tx_url(
+                result.tx_hash,
+                environment=settings.environment,
+                node_url=settings.anchoring.node_url,
+            ),
+        )
     table.add_row("manifest", str(result.manifest_path))
     console.print(table)
 
