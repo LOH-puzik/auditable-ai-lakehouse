@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 
 from audit_lakehouse.orchestration.replay_menu import _report_passed, discover_replay_events
+from audit_lakehouse.orchestration.run import _env_flag
 from audit_lakehouse.orchestration.runner import run_pipeline
 from audit_lakehouse.replay.report import ReplayReport
 
@@ -63,6 +64,17 @@ def test_replay_menu_can_allow_unanchored_local_reports() -> None:
 
     assert not _report_passed(report, allow_unanchored=False)
     assert _report_passed(report, allow_unanchored=True)
+
+
+def test_run_cli_env_flag_parser(monkeypatch) -> None:
+    monkeypatch.delenv("AUDIT_LAKEHOUSE_ANCHOR_ONCHAIN", raising=False)
+    assert not _env_flag("AUDIT_LAKEHOUSE_ANCHOR_ONCHAIN", default=False)
+
+    monkeypatch.setenv("AUDIT_LAKEHOUSE_ANCHOR_ONCHAIN", "true")
+    assert _env_flag("AUDIT_LAKEHOUSE_ANCHOR_ONCHAIN", default=False)
+
+    monkeypatch.setenv("AUDIT_LAKEHOUSE_ANCHOR_ONCHAIN", "0")
+    assert not _env_flag("AUDIT_LAKEHOUSE_ANCHOR_ONCHAIN", default=True)
 
 
 def _write_test_config(tmp_path: Path) -> Path:

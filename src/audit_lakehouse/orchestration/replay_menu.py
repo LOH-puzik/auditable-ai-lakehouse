@@ -40,7 +40,11 @@ def main(
     data_root: Path = typer.Option(
         Path("data/runs"), "--data-root", help="Root containing run manifests."
     ),
-    config: Path = typer.Option(Path("config/default.yaml"), "--config", help="YAML config path."),
+    config: Path = typer.Option(
+        Path(os.getenv("AUDIT_LAKEHOUSE_CONFIG", "config/default.yaml")),
+        "--config",
+        help="YAML config path.",
+    ),
     limit: int = typer.Option(25, "--limit", help="Maximum number of events to list."),
     index: int | None = typer.Option(
         None, "--index", help="Replay this listed index without prompting."

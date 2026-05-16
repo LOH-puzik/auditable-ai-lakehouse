@@ -122,9 +122,9 @@ uv run replay --alert-id <ALERT_ID>
 uv run replay --batch-id <BATCH_ID>
 ```
 
-### Optional Aptos anchoring
+### Aptos anchoring demo
 
-The local Merkle batch runs without a blockchain account. To publish roots to Aptos devnet, install the Aptos CLI, initialize/fund a devnet account, publish the Move module once, then run stage 07 with on-chain anchoring enabled:
+For the full thesis demo, publish the Move package once, set the Aptos environment variables once, then `run.exe` will publish each new Merkle root to Aptos automatically.
 
 ```powershell
 aptos init --network devnet
@@ -132,21 +132,24 @@ aptos move publish --package-dir blockchain --named-addresses auditable_ai_lakeh
 
 $env:AUDIT_LAKEHOUSE_CONFIG="config/aptos-devnet.yaml"
 $env:AUDIT_LAKEHOUSE_ANCHORING_PRIVATE_KEY="0x..."
-$env:AUDIT_LAKEHOUSE_ANCHORING__MODULE_ADDRESS="<YOUR_APTOS_ADDRESS>"
-$env:AUDIT_LAKEHOUSE_ANCHOR_ONCHAIN="true"
-.\.venv\Scripts\python.exe notebooks\07_anchor_batch.py
-```
-
-The orchestrator can also submit the Merkle root once the Aptos account and Move module are ready:
-
-```powershell
-$env:AUDIT_LAKEHOUSE_CONFIG="config/aptos-devnet.yaml"
-$env:AUDIT_LAKEHOUSE_ANCHORING_PRIVATE_KEY="0x..."
 $env:AUDIT_LAKEHOUSE_ANCHORING__ACCOUNT_ADDRESS="<YOUR_APTOS_ADDRESS>"
 $env:AUDIT_LAKEHOUSE_ANCHORING__MODULE_ADDRESS="<YOUR_APTOS_ADDRESS>"
-
-.\.venv\Scripts\run.exe --onchain
+$env:AUDIT_LAKEHOUSE_ANCHOR_ONCHAIN="true"
 ```
+
+After those variables are set, the normal run command anchors on-chain:
+
+```powershell
+.\.venv\Scripts\run.exe --n 100 --seed 42 --anomaly-rate 0.08
+```
+
+Then replay without `--allow-unanchored`:
+
+```powershell
+.\.venv\Scripts\replay-menu.exe --index 0
+```
+
+For offline local runs, force no chain submission with `--local-only`.
 
 ## Documentation
 

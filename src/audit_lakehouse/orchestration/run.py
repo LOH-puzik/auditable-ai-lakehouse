@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
 import typer
@@ -12,6 +13,13 @@ from audit_lakehouse.orchestration.runner import run_pipeline
 
 app = typer.Typer(help="Run the auditable AI pipeline end to end.")
 console = Console()
+
+
+def _env_flag(name: str, *, default: bool) -> bool:
+    value = os.getenv(name)
+    if value is None:
+        return default
+    return value.strip().lower() in {"1", "true", "yes", "on"}
 
 
 @app.callback(invoke_without_command=True)
@@ -26,11 +34,15 @@ def main(
     run_id: str | None = typer.Option(None, "--run-id", help="Optional explicit run identifier."),
     data_root: Path = typer.Option(Path("data/runs"), "--data-root", help="Root for run outputs."),
     config: Path = typer.Option(
-        Path("config/local-demo.yaml"),
+        Path(os.getenv("AUDIT_LAKEHOUSE_CONFIG", "config/local-demo.yaml")),
         "--config",
         help="YAML config path.",
     ),
-    onchain: bool = typer.Option(False, "--onchain", help="Submit the Merkle root to Aptos."),
+    onchain: bool = typer.Option(
+        _env_flag("AUDIT_LAKEHOUSE_ANCHOR_ONCHAIN", default=False),
+        "--onchain/--local-only",
+        help="Submit the Merkle root to Aptos.",
+    ),
 ) -> None:
     """Execute data generation, medallion processing, modeling, scoring, and anchoring."""
     result = run_pipeline(
