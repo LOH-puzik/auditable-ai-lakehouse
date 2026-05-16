@@ -277,7 +277,7 @@ def _payload(event: dict[str, Any]) -> dict[str, Any]:
 def _read_json(path: Path) -> dict[str, Any]:
     if not path.exists():
         raise FileNotFoundError(f"JSON file does not exist: {path}")
-    value = json.loads(path.read_text(encoding="utf-8"))
+    value = json.loads(path.read_text(encoding="utf-8-sig"))
     if not isinstance(value, dict):
         raise ValueError(f"Expected JSON object in {path}")
     return value
@@ -287,7 +287,8 @@ def _read_jsonl(path: Path) -> list[dict[str, Any]]:
     if not path.exists():
         raise FileNotFoundError(f"JSONL file does not exist: {path}")
     rows: list[dict[str, Any]] = []
-    for line_number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
+    for line_number, line in enumerate(path.read_text(encoding="utf-8-sig").splitlines(), start=1):
+        line = line.lstrip("\ufeff")
         if not line.strip():
             continue
         try:

@@ -67,6 +67,22 @@ def test_replay_detects_tampered_anchored_event(tmp_path, monkeypatch) -> None:
     assert report.merkle_proof_valid is False
 
 
+def test_replay_detects_tampered_gold_record_written_with_bom(tmp_path, monkeypatch) -> None:
+    evidence = _build_replay_evidence(tmp_path)
+    _set_replay_env(monkeypatch, evidence)
+    rows = _read_jsonl(evidence["gold_records_path"])
+    rows[0]["quantity"] = rows[0]["quantity"] + 1000
+    evidence["gold_records_path"].write_text(
+        "\n".join(json.dumps(row, sort_keys=True) for row in rows) + "\n",
+        encoding="utf-8-sig",
+    )
+
+    report = replay_alert(evidence["alert_id"])
+
+    assert report.passed is False
+    assert report.input_hash_match is False
+
+
 def _build_replay_evidence(tmp_path: Path) -> dict:
     gold_records_path = _build_gold_records(tmp_path)
     promotion_manifest_path = _build_promotion_manifest(tmp_path, gold_records_path)
