@@ -1,5 +1,5 @@
 # Default configuration. Overridden by:
-#   - config/aptos-devnet.yaml (when anchoring to Aptos devnet)
+#   - config/aptos-testnet.yaml (when anchoring to Aptos testnet)
 #   - environment variables (prefix AUDIT_LAKEHOUSE_, nested with __)
 #   - .env file (gitignored)
 #
@@ -26,8 +26,8 @@ mlflow:
     precision_at_k: 0.85
 
 anchoring:
-  node_url: https://fullnode.devnet.aptoslabs.com/v1
-  faucet_url: https://faucet.devnet.aptoslabs.com
+  node_url: https://fullnode.testnet.aptoslabs.com/v1
+  faucet_url: https://faucet.testnet.aptoslabs.com
   account_address: ""
   module_address: ""
   module_name: merkle_registry

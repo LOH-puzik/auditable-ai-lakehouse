@@ -8,7 +8,7 @@ This repository accompanies an MSc thesis exploring how a medallion lakehouse ar
 
 1. **Medallion lakehouse** — Bronze (raw SWIFT-like MT540/MT548 ingestion), Silver (parsed + structurally validated, with a quarantine table for non-conforming records), Gold (feature engineering with snapshot identifiers for reproducibility). Implemented on Databricks and Delta Lake.
 2. **MLflow model lifecycle** — an Isolation Forest anomaly-detection model trained, versioned, and promoted through formal staging gates. Promotion from Staging to Production is conditional on metric thresholds (precision, recall, precision@k) and each promotion event is logged to the governance event store.
-3. **Blockchain-anchored audit log** — full governance events remain in Delta Lake, but cryptographic hashes of batches are aggregated into Merkle trees whose roots are committed to an external append-only ledger. This prototype uses Aptos devnet as a low-friction proxy for a permissioned enterprise ledger.
+3. **Blockchain-anchored audit log** — full governance events remain in Delta Lake, but cryptographic hashes of batches are aggregated into Merkle trees whose roots are committed to an external append-only ledger. This prototype uses Aptos testnet as a low-friction proxy for a permissioned enterprise ledger.
 
 An **auditor replay tool** closes the loop: given an alert or batch identifier, the tool reloads the exact Gold snapshot, re-runs inference deterministically, compares the result to the logged output, and verifies the Merkle inclusion proof against the anchored root.
 
@@ -20,7 +20,7 @@ auditable-ai-lakehouse/
 ├── notebooks/           Databricks notebooks (Bronze → Silver → Gold → train → score → anchor)
 ├── src/audit_lakehouse/ Installable Python package (generator, anchoring, replay, compliance)
 ├── tests/               Unit tests (pytest)
-├── config/              YAML configuration (local demo, default gates, Aptos devnet)
+├── config/              YAML configuration (local demo, default gates, Aptos testnet)
 ├── docs/                MkDocs site (architecture, compliance mapping, replay tool)
 ├── scripts/             Convenience shell scripts
 └── .github/workflows/   CI (pytest + ruff) and docs deployment
@@ -32,7 +32,7 @@ auditable-ai-lakehouse/
 - Python 3.11
 - [uv](https://github.com/astral-sh/uv) for dependency management
 - A Databricks Free Edition account (for running the notebooks)
-- An Aptos devnet account and the Aptos CLI (only needed for on-chain anchoring)
+- An Aptos testnet account and the Aptos CLI (only needed for on-chain anchoring)
 
 ### Install
 ```bash
@@ -127,10 +127,10 @@ uv run replay --batch-id <BATCH_ID>
 For the full thesis demo, publish the Move package once, set the Aptos environment variables once, then `run.exe` will publish each new Merkle root to Aptos automatically.
 
 ```powershell
-aptos init --network devnet
-aptos move publish --package-dir blockchain --named-addresses auditable_ai_lakehouse=<YOUR_APTOS_ADDRESS>
+aptos init --profile audit-lakehouse-testnet --network testnet
+aptos move publish --profile audit-lakehouse-testnet --package-dir blockchain --named-addresses auditable_ai_lakehouse=<YOUR_APTOS_ADDRESS>
 
-$env:AUDIT_LAKEHOUSE_CONFIG="config/aptos-devnet.yaml"
+$env:AUDIT_LAKEHOUSE_CONFIG="config/aptos-testnet.yaml"
 $env:AUDIT_LAKEHOUSE_ANCHORING_PRIVATE_KEY="0x..."
 $env:AUDIT_LAKEHOUSE_ANCHORING__ACCOUNT_ADDRESS="<YOUR_APTOS_ADDRESS>"
 $env:AUDIT_LAKEHOUSE_ANCHORING__MODULE_ADDRESS="<YOUR_APTOS_ADDRESS>"

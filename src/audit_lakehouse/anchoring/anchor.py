@@ -19,7 +19,7 @@ T = TypeVar("T")
 
 
 class AptosLedgerClient(LedgerClient):
-    """LedgerClient implementation backed by Aptos devnet/testnet/mainnet."""
+    """LedgerClient implementation backed by Aptos testnet/mainnet."""
 
     def __init__(
         self,

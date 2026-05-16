@@ -1,6 +1,6 @@
 """Ledger abstraction.
 
-The thesis treats the public Aptos devnet/testnet as a practical proxy for an
+The thesis treats the public Aptos testnet as a practical proxy for an
 external append-only audit domain. The rest of the system talks to a
 `LedgerClient` protocol rather than to an Aptos SDK client directly, so a
 permissioned ledger adapter can still be swapped in later.

@@ -1,10 +1,10 @@
-# Aptos devnet overrides. Inherits everything else from default.yaml.
+# Aptos testnet overrides. Inherits everything else from default.yaml.
 
-environment: aptos-devnet
+environment: aptos-testnet
 
 anchoring:
-  node_url: https://fullnode.devnet.aptoslabs.com/v1
-  faucet_url: https://faucet.devnet.aptoslabs.com
+  node_url: https://fullnode.testnet.aptoslabs.com/v1
+  faucet_url: https://faucet.testnet.aptoslabs.com
   batch_size: 100
   max_gas_amount: 10000
   gas_unit_price: 100

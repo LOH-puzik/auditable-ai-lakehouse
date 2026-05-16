@@ -16,7 +16,7 @@ def test_aptos_ledger_commits_root_and_reads_root_with_fake_client(monkeypatch) 
         _fake_build_payload,
     )
     client = AptosLedgerClient(
-        node_url="https://fullnode.devnet.aptoslabs.com/v1",
+        node_url="https://fullnode.testnet.aptoslabs.com/v1",
         private_key="0x" + "1" * 64,
         module_address="0x" + "3" * 64,
         aptos_client=fake_client,
@@ -49,7 +49,7 @@ def test_aptos_ledger_accepts_vector_root_from_event(monkeypatch) -> None:
         _fake_build_payload,
     )
     client = AptosLedgerClient(
-        node_url="https://fullnode.devnet.aptoslabs.com/v1",
+        node_url="https://fullnode.testnet.aptoslabs.com/v1",
         private_key="0x" + "1" * 64,
         aptos_client=fake_client,
         aptos_account=fake_account,
@@ -66,7 +66,7 @@ def test_aptos_ledger_rejects_invalid_merkle_root(monkeypatch) -> None:
         _fake_build_payload,
     )
     client = AptosLedgerClient(
-        node_url="https://fullnode.devnet.aptoslabs.com/v1",
+        node_url="https://fullnode.testnet.aptoslabs.com/v1",
         private_key="0x" + "1" * 64,
         aptos_client=fake_client,
         aptos_account=fake_account,
@@ -79,7 +79,7 @@ def test_aptos_ledger_rejects_invalid_merkle_root(monkeypatch) -> None:
 def test_aptos_ledger_supports_read_only_root_lookup() -> None:
     root = "c" * 64
     client = AptosLedgerClient(
-        node_url="https://fullnode.devnet.aptoslabs.com/v1",
+        node_url="https://fullnode.testnet.aptoslabs.com/v1",
         module_address="0x" + "2" * 64,
         aptos_client=_FakeAptosClient(root=root),
     )
@@ -91,7 +91,7 @@ def test_aptos_ledger_rejects_missing_commit_key() -> None:
     fake_account = _FakeAptosAccount("0x" + "2" * 64)
 
     client = AptosLedgerClient(
-        node_url="https://fullnode.devnet.aptoslabs.com/v1",
+        node_url="https://fullnode.testnet.aptoslabs.com/v1",
         aptos_client=_FakeAptosClient(root="a" * 64),
     )
     with pytest.raises(ValueError, match="private_key"):
@@ -108,7 +108,7 @@ def test_aptos_ledger_rejects_missing_commit_key() -> None:
 
 def test_aptos_ledger_rejects_missing_module_address_for_read_only() -> None:
     client = AptosLedgerClient(
-        node_url="https://fullnode.devnet.aptoslabs.com/v1",
+        node_url="https://fullnode.testnet.aptoslabs.com/v1",
         aptos_client=_FakeAptosClient(root="a" * 64),
     )
 
@@ -119,7 +119,7 @@ def test_aptos_ledger_rejects_missing_module_address_for_read_only() -> None:
 def test_aptos_ledger_rejects_account_mismatch() -> None:
     with pytest.raises(ValueError, match="account_address"):
         AptosLedgerClient(
-            node_url="https://fullnode.devnet.aptoslabs.com/v1",
+            node_url="https://fullnode.testnet.aptoslabs.com/v1",
             private_key="0x" + "1" * 64,
             account_address="0x" + "3" * 64,
             aptos_client=_FakeAptosClient(root="a" * 64),

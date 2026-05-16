@@ -31,10 +31,10 @@ From the repository root:
 aptos move compile --package-dir blockchain --named-addresses auditable_ai_lakehouse=<YOUR_APTOS_ADDRESS>
 ```
 
-## Publish To Devnet
+## Publish To Testnet
 
 ```powershell
-aptos move publish --profile audit-lakehouse-devnet --package-dir blockchain --named-addresses auditable_ai_lakehouse=<YOUR_APTOS_ADDRESS>
+aptos move publish --profile audit-lakehouse-testnet --package-dir blockchain --named-addresses auditable_ai_lakehouse=<YOUR_APTOS_ADDRESS>
 ```
 
 The Python orchestrator expects the published module address to be set as:

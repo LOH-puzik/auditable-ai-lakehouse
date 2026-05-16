@@ -42,8 +42,8 @@ class MLflowConfig(BaseModel):
 class AnchoringConfig(BaseModel):
     """Aptos anchoring settings. Private key comes from env var only."""
 
-    node_url: str = "https://fullnode.devnet.aptoslabs.com/v1"
-    faucet_url: str = "https://faucet.devnet.aptoslabs.com"
+    node_url: str = "https://fullnode.testnet.aptoslabs.com/v1"
+    faucet_url: str = "https://faucet.testnet.aptoslabs.com"
     account_address: str = ""
     module_address: str = ""
     module_name: str = "merkle_registry"
