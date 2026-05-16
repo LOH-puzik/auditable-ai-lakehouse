@@ -132,9 +132,12 @@ def discover_replay_events(
 
 
 def _run_manifests(data_root: Path, *, include_notebook_latest: bool) -> list[dict]:
-    manifests = [
-        _read_json(path) for path in sorted(data_root.glob("*/run_manifest.json"), reverse=True)
-    ]
+    manifests = [_read_json(path) for path in data_root.glob("*/run_manifest.json")]
+    manifests = sorted(
+        manifests,
+        key=lambda manifest: str(manifest.get("started_at", "")),
+        reverse=True,
+    )
     if include_notebook_latest:
         notebook_manifest = _notebook_artifact_manifest()
         if notebook_manifest is not None:
