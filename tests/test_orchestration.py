@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import json
-import os
 from pathlib import Path
 
 from audit_lakehouse.orchestration.replay_menu import _report_passed, discover_replay_events
@@ -71,7 +70,8 @@ def test_replay_menu_can_allow_unanchored_local_reports() -> None:
     assert _report_passed(report, allow_unanchored=True)
 
 
-def test_run_cli_env_flag_parser(monkeypatch) -> None:
+def test_run_cli_env_flag_parser(tmp_path, monkeypatch) -> None:
+    monkeypatch.chdir(tmp_path)
     monkeypatch.delenv("AUDIT_LAKEHOUSE_ANCHOR_ONCHAIN", raising=False)
     assert not _env_flag("AUDIT_LAKEHOUSE_ANCHOR_ONCHAIN", default=False)
 
@@ -93,16 +93,27 @@ def test_run_cli_env_flag_parser_reads_dotenv(tmp_path, monkeypatch) -> None:
     assert _env_flag("AUDIT_LAKEHOUSE_ANCHOR_ONCHAIN", default=False)
 
 
-def test_run_cli_prompts_for_private_key_when_onchain(monkeypatch) -> None:
+def test_run_cli_accepts_private_key_from_dotenv(tmp_path, monkeypatch) -> None:
+    monkeypatch.chdir(tmp_path)
     monkeypatch.delenv(PRIVATE_KEY_ENV, raising=False)
-    monkeypatch.setattr(
-        "audit_lakehouse.orchestration.run.typer.prompt",
-        lambda *args, **kwargs: "0x" + "1" * 64,
+    (tmp_path / ".env").write_text(
+        f"{PRIVATE_KEY_ENV}=0x{'1' * 64}\n",
+        encoding="utf-8",
     )
 
     _ensure_private_key_for_onchain(True)
 
-    assert os.environ[PRIVATE_KEY_ENV] == "0x" + "1" * 64
+
+def test_run_cli_requires_private_key_when_onchain(tmp_path, monkeypatch) -> None:
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.delenv(PRIVATE_KEY_ENV, raising=False)
+
+    try:
+        _ensure_private_key_for_onchain(True)
+    except Exception as exc:
+        assert PRIVATE_KEY_ENV in str(exc)
+    else:
+        raise AssertionError("Expected private-key prompt to be rejected when output is piped")
 
 
 def _write_test_config(tmp_path: Path) -> Path:

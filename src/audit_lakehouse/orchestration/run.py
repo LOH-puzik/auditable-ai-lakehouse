@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import os
 from pathlib import Path
 
 import typer
@@ -27,10 +26,10 @@ def _ensure_private_key_for_onchain(onchain: bool) -> None:
     if not onchain or _has_private_key():
         return
 
-    private_key = typer.prompt("Aptos private key", hide_input=True)
-    if not _looks_like_private_key(private_key):
-        raise typer.BadParameter("A valid Aptos private key is required for on-chain anchoring.")
-    os.environ[PRIVATE_KEY_ENV] = private_key.strip()
+    raise typer.BadParameter(
+        f"{PRIVATE_KEY_ENV} must be set in .env or the current environment "
+        "for on-chain anchoring."
+    )
 
 
 def _has_private_key() -> bool:

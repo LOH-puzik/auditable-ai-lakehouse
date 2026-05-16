@@ -140,6 +140,7 @@ def _build_rest_client(
     client_config = ClientConfig(
         max_gas_amount=max_gas_amount,
         gas_unit_price=gas_unit_price,
+        http2=False,
     )
     return RestClient(node_url, client_config=client_config)
 

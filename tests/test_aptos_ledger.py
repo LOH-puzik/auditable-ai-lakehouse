@@ -2,9 +2,12 @@
 
 from __future__ import annotations
 
+import asyncio
+
 import pytest
 
 from audit_lakehouse.anchoring import AptosLedgerClient, aptos_explorer_tx_url
+from audit_lakehouse.anchoring.anchor import _build_rest_client
 
 
 def test_aptos_ledger_commits_root_and_reads_root_with_fake_client(monkeypatch) -> None:
@@ -48,6 +51,19 @@ def test_aptos_explorer_url_uses_testnet_network() -> None:
         )
         == f"https://explorer.aptoslabs.com/txn/{tx_hash}?network=testnet"
     )
+
+
+def test_aptos_rest_client_disables_http2_for_windows_stability() -> None:
+    client = _build_rest_client(
+        node_url="https://fullnode.testnet.aptoslabs.com/v1",
+        max_gas_amount=10_000,
+        gas_unit_price=100,
+    )
+
+    try:
+        assert client.client_config.http2 is False
+    finally:
+        asyncio.run(client.close())
 
 
 def test_aptos_ledger_accepts_vector_root_from_event(monkeypatch) -> None:
