@@ -20,7 +20,7 @@ from audit_lakehouse.replay.report import ReplayReport
 from audit_lakehouse.runtime_env import env_value
 
 app = typer.Typer(help="Choose an existing inference event and replay it.")
-console = Console()
+console = Console(width=160)
 
 
 @dataclass(frozen=True)
@@ -165,13 +165,16 @@ def _notebook_artifact_manifest() -> dict | None:
 
 
 def _print_events(events: list[ReplayMenuEvent]) -> None:
-    table = Table(title="Replayable inference events")
-    table.add_column("#", justify="right")
-    table.add_column("Run")
-    table.add_column("Alert")
-    table.add_column("Decision")
-    table.add_column("Score", justify="right")
-    table.add_column("Batch")
+    table = Table(
+        title="Replayable inference events",
+        caption="Use the Index value with --index to replay one event.",
+    )
+    table.add_column("Index", justify="right", no_wrap=True)
+    table.add_column("Run ID", overflow="fold")
+    table.add_column("Inference event ID", overflow="fold")
+    table.add_column("Model decision", no_wrap=True)
+    table.add_column("Model score", justify="right", no_wrap=True)
+    table.add_column("Merkle batch ID", overflow="fold")
     for event in events:
         table.add_row(
             str(event.index),

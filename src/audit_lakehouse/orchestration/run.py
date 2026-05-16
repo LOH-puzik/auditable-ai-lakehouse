@@ -16,7 +16,7 @@ from audit_lakehouse.orchestration.runner import run_pipeline
 from audit_lakehouse.runtime_env import env_flag, env_value
 
 app = typer.Typer(help="Run the auditable AI pipeline end to end.")
-console = Console()
+console = Console(width=160)
 PRIVATE_KEY_ENV = "AUDIT_LAKEHOUSE_ANCHORING_PRIVATE_KEY"
 
 
@@ -93,8 +93,8 @@ def main(
     )
 
     table = Table(title="audit-lakehouse run")
-    table.add_column("Field")
-    table.add_column("Value")
+    table.add_column("Field", no_wrap=True)
+    table.add_column("Value", overflow="fold")
     table.add_row("run_id", result.run_id)
     table.add_row("run_dir", str(result.run_dir))
     table.add_row("records_generated", str(result.records_generated))

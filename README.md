@@ -175,7 +175,18 @@ Optional reliability check:
 | `aptos_explorer` | Direct Aptos Explorer URL for the transaction. |
 | `manifest` | Main JSON summary for the run. |
 
-`replay-menu.exe --index 0` first lists replayable events, then prints one JSON report:
+`replay-menu.exe --index 0` first lists replayable events:
+
+| List column | Meaning |
+| --- | --- |
+| `Index` | Number to pass to `--index` when choosing an event. |
+| `Run ID` | Pipeline execution that produced the event. |
+| `Inference event ID` | Logged scoring event that will be replayed. |
+| `Model decision` | Original model decision, for example `alert` or `clear`. |
+| `Model score` | Original anomaly score stored in the event log. |
+| `Merkle batch ID` | Batch that links this event to one Merkle root. |
+
+Then it prints one JSON report:
 
 | Field | Meaning |
 | --- | --- |
