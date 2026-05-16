@@ -152,7 +152,7 @@ def finalize_anchor_batch(
     manifest = json.loads(manifest_source.read_text(encoding="utf-8"))
     merkle_root = str(manifest["merkle_root"])
     receipt = ledger_client.commit_root(merkle_root)
-    onchain_root = ledger_client.read_root(receipt.tx_hash)
+    onchain_root = receipt.merkle_root
     if onchain_root != merkle_root:
         raise ValueError(
             f"On-chain root mismatch: committed {merkle_root}, read back {onchain_root}"

@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import logging
+import warnings
 from pathlib import Path
 
 import typer
@@ -20,6 +22,15 @@ PRIVATE_KEY_ENV = "AUDIT_LAKEHOUSE_ANCHORING_PRIVATE_KEY"
 
 def _env_flag(name: str, *, default: bool) -> bool:
     return env_flag(name, default=default)
+
+
+def _quiet_mlflow_output() -> None:
+    logging.getLogger("mlflow").setLevel(logging.ERROR)
+    warnings.filterwarnings(
+        "ignore",
+        message="The filesystem tracking backend.*",
+        category=FutureWarning,
+    )
 
 
 def _ensure_private_key_for_onchain(onchain: bool) -> None:
@@ -67,6 +78,7 @@ def main(
     ),
 ) -> None:
     """Execute data generation, medallion processing, modeling, scoring, and anchoring."""
+    _quiet_mlflow_output()
     _ensure_private_key_for_onchain(onchain)
     result = run_pipeline(
         n=n,

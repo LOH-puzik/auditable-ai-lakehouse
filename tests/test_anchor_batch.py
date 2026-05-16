@@ -247,7 +247,7 @@ class _FakeLedger:
         return AnchorReceipt(
             tx_hash="0x" + "c" * 64,
             block_number=123,
-            merkle_root=merkle_root,
+            merkle_root=self.root,
         )
 
     def read_root(self, tx_hash: str) -> str:
