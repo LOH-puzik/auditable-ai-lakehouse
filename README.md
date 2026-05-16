@@ -19,7 +19,7 @@ auditable-ai-lakehouse/
 ├── notebooks/         Databricks notebooks (Bronze → Silver → Gold → train → score → anchor)
 ├── src/swift_audit/   Installable Python package (generator, anchoring, replay, compliance)
 ├── tests/             Unit tests (pytest)
-├── config/            YAML configuration (default + Aptos devnet)
+├── config/            YAML configuration (local demo, default gates, Aptos devnet)
 ├── docs/              MkDocs site (architecture, compliance mapping, replay tool)
 ├── scripts/           Convenience shell scripts
 └── .github/workflows/ CI (pytest + ruff) and docs deployment
@@ -84,6 +84,30 @@ When returning to the project, reactivate the environment first:
 uv run pytest
 ```
 
+### Run the full demo pipeline
+
+The simplest end-to-end demo is the orchestrator executable. It creates a new run under `data/runs/<RUN_ID>/`, then writes a `run_manifest.json` that the replay menu can discover later. The short commands are `run` and `replay-menu`; the same entry points are also available as `swift-audit-run` and `swift-audit-replay-menu`.
+
+```powershell
+.\.venv\Scripts\run.exe --n 100 --seed 42 --anomaly-rate 0.08
+```
+
+This runs synthetic ingestion, Bronze/Silver/Gold processing, model training, promotion, scoring, governance event generation, and local Merkle batching.
+
+The executable defaults to `config/local-demo.yaml`, which keeps promotion thresholds permissive so small synthetic demos complete. Use `--config config/default.yaml` when you want the stricter thesis governance gates.
+
+After a run, choose an event interactively and replay it:
+
+```powershell
+.\.venv\Scripts\replay-menu.exe
+```
+
+To choose without the prompt:
+
+```powershell
+.\.venv\Scripts\replay-menu.exe --index 0
+```
+
 ### Run the replay tool
 ```bash
 uv run replay --alert-id <ALERT_ID>
@@ -104,6 +128,17 @@ $env:SWIFT_AUDIT_ANCHORING_PRIVATE_KEY="0x..."
 $env:SWIFT_AUDIT_ANCHORING__MODULE_ADDRESS="<YOUR_APTOS_ADDRESS>"
 $env:SWIFT_AUDIT_ANCHOR_ONCHAIN="true"
 .\.venv\Scripts\python.exe notebooks\07_anchor_batch.py
+```
+
+The orchestrator can also submit the Merkle root once the Aptos account and Move module are ready:
+
+```powershell
+$env:SWIFT_AUDIT_CONFIG="config/aptos-devnet.yaml"
+$env:SWIFT_AUDIT_ANCHORING_PRIVATE_KEY="0x..."
+$env:SWIFT_AUDIT_ANCHORING__ACCOUNT_ADDRESS="<YOUR_APTOS_ADDRESS>"
+$env:SWIFT_AUDIT_ANCHORING__MODULE_ADDRESS="<YOUR_APTOS_ADDRESS>"
+
+.\.venv\Scripts\run.exe --onchain
 ```
 
 ## Documentation

@@ -1,0 +1,17 @@
+# Local demo configuration for the orchestration executable.
+#
+# The thesis governance gate is still implemented in code, but this profile
+# keeps thresholds permissive so a small synthetic run can complete end to end.
+
+environment: local-demo
+
+mlflow:
+  registered_model_name: swift_audit_isolation_forest
+  promotion_thresholds:
+    precision: 0.0
+    recall: 0.0
+    precision_at_k: 0.0
+
+governance:
+  approver: local_demo_approver
+  deployer: local_demo_deployer

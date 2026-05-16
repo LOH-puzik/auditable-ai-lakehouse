@@ -63,6 +63,10 @@ docs = [
 replay = "swift_audit.replay.cli:app"
 verify-anchor = "swift_audit.anchoring.verify:cli"
 render-compliance = "swift_audit.compliance.render:cli"
+run = "swift_audit.orchestration.run:app"
+replay-menu = "swift_audit.orchestration.replay_menu:app"
+swift-audit-run = "swift_audit.orchestration.run:app"
+swift-audit-replay-menu = "swift_audit.orchestration.replay_menu:app"
 
 [build-system]
 requires = ["hatchling"]
@@ -85,6 +89,7 @@ ignore = ["E501"]  # handled by black
 "**/cli.py" = ["B008"]
 "**/verify.py" = ["B008"]
 "**/render.py" = ["B008"]
+"**/orchestration/*.py" = ["B008"]
 
 [tool.black]
 line-length = 100
