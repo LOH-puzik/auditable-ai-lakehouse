@@ -85,82 +85,84 @@ When returning to the project, reactivate the environment first:
 uv run pytest
 ```
 
-### Run the full demo pipeline
+### Run the full project end to end
 
-The simplest end-to-end demo is the orchestrator executable. It creates a new run under `data/runs/<RUN_ID>/`, then writes a `run_manifest.json` that the replay menu can discover later. The short commands are `run` and `replay-menu`; the same entry points are also available as `audit-lakehouse-run` and `audit-lakehouse-replay-menu`.
+Use this sequence for the thesis demo on Windows PowerShell.
 
-```powershell
-.\.venv\Scripts\run.exe --n 100 --seed 42 --anomaly-rate 0.08
-```
-
-This runs synthetic ingestion, Bronze/Silver/Gold processing, model training, promotion, scoring, governance event generation, and local Merkle batching.
-
-The executable defaults to `config/local-demo.yaml`, which keeps promotion thresholds permissive so small synthetic demos complete. Use `--config config/default.yaml` when you want the stricter thesis governance gates.
-
-After a run, choose an event interactively and replay it:
+#### 1. Activate the project environment
 
 ```powershell
-.\.venv\Scripts\replay-menu.exe
+cd C:\Users\Dhia\Projects\MSc-thesis\auditable-ai-lakehouse
+.\.venv\Scripts\Activate.ps1
 ```
 
-To choose without the prompt:
+If `.venv` does not exist yet, create it first:
 
 ```powershell
-.\.venv\Scripts\replay-menu.exe --index 0
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install -e ".[dev,docs]"
 ```
 
-Before Aptos anchoring is configured, local replay can still prove the input hash, deterministic score, and Merkle proof. Use this for local smoke tests:
-
-```powershell
-.\.venv\Scripts\replay-menu.exe --index 0 --allow-unanchored
-```
-
-### Run the replay tool
-```bash
-uv run replay --alert-id <ALERT_ID>
-# or
-uv run replay --batch-id <BATCH_ID>
-```
-
-### Aptos anchoring demo
-
-For the full thesis demo, publish the Move package once, set the Aptos environment variables once, then `run.exe` will publish each new Merkle root to Aptos automatically.
+#### 2. Publish the Aptos Move module once
 
 ```powershell
 aptos init --profile audit-lakehouse-testnet --network testnet
+aptos move compile --package-dir blockchain --named-addresses auditable_ai_lakehouse=<YOUR_APTOS_ADDRESS>
 aptos move publish --profile audit-lakehouse-testnet --package-dir blockchain --named-addresses auditable_ai_lakehouse=<YOUR_APTOS_ADDRESS>
 ```
 
-For a repeatable local demo, create `.env` from `.env.example` and fill in the testnet values. The real `.env` is gitignored.
+#### 3. Configure the live demo
+
+Create a local `.env` file. The real `.env` is gitignored.
 
 ```powershell
 Copy-Item .env.example .env
 ```
 
-The relevant values are:
+Set these values in `.env`:
 
-```powershell
-$env:AUDIT_LAKEHOUSE_CONFIG="config/aptos-testnet.yaml"
-$env:AUDIT_LAKEHOUSE_ANCHORING__ACCOUNT_ADDRESS="<YOUR_APTOS_ADDRESS>"
-$env:AUDIT_LAKEHOUSE_ANCHORING__MODULE_ADDRESS="<YOUR_APTOS_ADDRESS>"
-$env:AUDIT_LAKEHOUSE_ANCHOR_ONCHAIN="true"
+```text
+AUDIT_LAKEHOUSE_CONFIG=config/aptos-testnet.yaml
+AUDIT_LAKEHOUSE_ANCHOR_ONCHAIN=true
+AUDIT_LAKEHOUSE_ANCHORING__ACCOUNT_ADDRESS=<YOUR_APTOS_ADDRESS>
+AUDIT_LAKEHOUSE_ANCHORING__MODULE_ADDRESS=<YOUR_APTOS_ADDRESS>
 ```
 
-Do not commit private keys. You can either set `AUDIT_LAKEHOUSE_ANCHORING_PRIVATE_KEY` in your local `.env`, or leave it unset and `run.exe` will ask for it when it needs to submit the Aptos transaction.
+Do not commit private keys. Leave `AUDIT_LAKEHOUSE_ANCHORING_PRIVATE_KEY` unset and `run.exe` will ask for it securely when it needs to submit the Aptos transaction.
 
-After those variables are set in PowerShell or saved in `.env`, the normal run command anchors on-chain and prints the Aptos Explorer transaction URL:
+#### 4. Run the full pipeline
 
 ```powershell
 .\.venv\Scripts\run.exe
 ```
 
-Then replay without `--allow-unanchored`; the replay command also prints the same Explorer transaction URL:
+This runs synthetic SWIFT data generation, Bronze ingestion, Silver validation/quarantine, Gold feature building, model training, model promotion, scoring, governance event generation, Merkle batch creation, and Aptos testnet anchoring. The command prints the Aptos Explorer transaction URL after anchoring.
+
+#### 5. Replay one event
 
 ```powershell
 .\.venv\Scripts\replay-menu.exe --index 0
 ```
 
-For offline local runs, force no chain submission with `--local-only`.
+Replay verifies the input hash, deterministic model score, Merkle proof, and Aptos on-chain root match. It also prints the Aptos Explorer URL for the anchored transaction.
+
+#### 6. Optional local-only smoke test
+
+For a demo without Aptos submission:
+
+```powershell
+.\.venv\Scripts\run.exe --local-only
+.\.venv\Scripts\replay-menu.exe --index 0 --allow-unanchored
+```
+
+### Run the replay tool directly
+```bash
+uv run replay --alert-id <ALERT_ID>
+# or
+uv run replay --batch-id <BATCH_ID>
+```
 
 ## Documentation
 
