@@ -6,9 +6,9 @@ This repository accompanies an MSc thesis exploring how a medallion lakehouse ar
 
 ## The three pillars
 
-1. **Medallion lakehouse** — Bronze (raw SWIFT-like MT540/MT548 ingestion), Silver (parsed + structurally validated, with a quarantine table for non-conforming records), Gold (feature engineering with snapshot identifiers for reproducibility). Implemented on Databricks and Delta Lake.
+1. **Medallion lakehouse** — Bronze (raw SWIFT-like MT540/MT548 ingestion), Silver (parsed + structurally validated, with a quarantine table for non-conforming records), Gold (feature engineering with snapshot identifiers for reproducibility). The submitted prototype uses local JSONL records and manifests to make the artefact executable and inspectable in an academic environment, while preserving control semantics compatible with a Databricks/Delta Lake medallion deployment.
 2. **MLflow model lifecycle** — an Isolation Forest anomaly-detection model trained, versioned, and promoted through formal staging gates. Promotion from Staging to Production is conditional on metric thresholds (precision, recall, precision@k) and each promotion event is logged to the governance event store.
-3. **Blockchain-anchored audit log** — full governance events remain in Delta Lake, but cryptographic hashes of batches are aggregated into Merkle trees whose roots are committed to an external append-only ledger. This prototype uses Aptos testnet as a low-friction proxy for a permissioned enterprise ledger.
+3. **Blockchain-anchored audit log** — full governance events remain off-chain in local JSONL evidence files for the submitted prototype, while cryptographic hashes of batches are aggregated into Merkle trees whose roots are committed to an external append-only ledger. This prototype uses Aptos testnet as a low-friction proxy for a permissioned enterprise ledger.
 
 An **auditor replay tool** closes the loop: given an alert or batch identifier, the tool reloads the exact Gold snapshot, re-runs inference deterministically, compares the result to the logged output, and verifies the Merkle inclusion proof against the anchored root.
 
@@ -17,7 +17,7 @@ An **auditor replay tool** closes the loop: given an alert or batch identifier, 
 ```
 auditable-ai-lakehouse/
 ├── blockchain/          Aptos Move package for Merkle root anchoring
-├── notebooks/           Databricks notebooks (Bronze → Silver → Gold → train → score → anchor)
+├── notebooks/           Notebook workflows (Bronze → Silver → Gold → train → score → anchor)
 ├── src/audit_lakehouse/ Installable Python package (generator, anchoring, replay, compliance)
 ├── tests/               Unit tests (pytest)
 ├── config/              YAML configuration (local demo, default gates, Aptos testnet)
@@ -31,7 +31,7 @@ auditable-ai-lakehouse/
 ### Prerequisites
 - Python 3.11
 - [uv](https://github.com/astral-sh/uv) for dependency management
-- A Databricks Free Edition account (for running the notebooks)
+- Optional: a Databricks Free Edition account if you want to adapt the notebook workflow
 - An Aptos testnet account and the Aptos CLI (only needed for on-chain anchoring)
 
 ### Install

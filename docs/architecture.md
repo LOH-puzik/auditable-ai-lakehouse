@@ -2,7 +2,7 @@
 
 This page expands the three pillars summarised on the home page and walks through each artefact in implementation order.
 
-> **Status:** prototype implementation. The core pipeline, model lifecycle, Merkle batching, Aptos anchoring adapter, and replay tool are implemented; the standalone `verify-anchor` command remains separate work.
+> **Status:** prototype implementation. The core pipeline, model lifecycle, Merkle batching, Aptos anchoring adapter, replay tool, and standalone `verify-anchor` command are implemented. The standalone `verify-anchor` command verifies manifest counts, event/proof consistency, Merkle inclusion proofs, and ledger-root matching where ledger evidence is available.
 
 ## Build order
 
