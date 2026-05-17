@@ -23,7 +23,7 @@ auditable-ai-lakehouse/
 ├── config/              YAML configuration (local demo, default gates, Aptos testnet)
 ├── docs/                MkDocs site (architecture, compliance mapping, replay tool)
 ├── scripts/             Convenience shell scripts
-└── .github/workflows/   CI (pytest + ruff) and docs deployment
+└── .github/workflows/   CI (pytest, ruff, black)
 ```
 
 ## Quickstart
@@ -217,7 +217,7 @@ uv run replay --batch-id <BATCH_ID>
 
 ## Documentation
 
-Full documentation, including the architecture deep-dive and the compliance mapping, is published via MkDocs. To build locally:
+Full documentation, including the architecture deep-dive and the compliance mapping, can be built locally with MkDocs:
 ```bash
 uv run mkdocs serve
 ```
